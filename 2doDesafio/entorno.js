@@ -36,8 +36,8 @@ const entorno = async () => {
     // console.log(await pm.getProductById(5));
     //---------------------
     //prueba 6 - modificar el campo de un producto sin eliminar el id
-    await pm.updateProduct(1, "code", "ggg789");
-    console.log(await pm.getProducts());
+    // await pm.updateProduct(1, "code", "ggg789");
+    // console.log(await pm.getProducts());
     //---------------------
     //prueba 7 - eliminar un producto
     // await pm.deleteProduct(2);
