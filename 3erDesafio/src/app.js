@@ -24,7 +24,7 @@ app.get("/products/:pid", async (req, res) => {
   id = parseInt(id);
 
   if (isNaN(id)) {
-    res.status(400).send("Error, ingrese un argumento id numérico");
+    return res.status(400).send("Error, ingrese un argumento id numérico");
   }
 
   let resultado = await pm.getProducts();
@@ -34,7 +34,7 @@ app.get("/products/:pid", async (req, res) => {
   res.setHeader("Content-Type", "application/json");
 
   if (!resultado) {
-    res
+    return res
       .status(404)
       .send("El número ingresado no corresponde a un id existente");
   } else {
