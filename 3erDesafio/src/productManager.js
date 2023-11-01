@@ -6,11 +6,12 @@ class ProductManager {
   }
 
   async getProducts() {
+    console.log(this.path);
     if (fs.existsSync(this.path)) {
+      console.log("existe");
       return JSON.parse(await fs.promises.readFile(this.path, "utf8"));
     } else {
       return [];
-      // return "hola Guille";
     }
   }
 
