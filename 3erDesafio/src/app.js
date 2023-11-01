@@ -10,17 +10,15 @@ const app = express();
 app.get("/products", async (req, res) => {
   let resultado = await pm.getProducts();
 
-  console.log(resultado);
-
-  // if (req.query.limit) {
-  //   resultado = resultado.slice(0, req.query.limit);
-  // }
+  if (req.query.limit) {
+    resultado = resultado.slice(0, req.query.limit);
+  }
 
   res.setHeader("Content-Type", "application/json");
   res.status(200).json({ resultado });
 });
 
-app.get("/products/:pid", (req, res) => {
+app.get("/products/:pid", async (req, res) => {
   let id = req.params.pid;
 
   id = parseInt(id);
@@ -29,7 +27,9 @@ app.get("/products/:pid", (req, res) => {
     return res.send("Error, ingrese un argumento id numérico");
   }
 
-  let resultado = Products.find((prod) => prod.id === id);
+  let resultado = await pm.getProducts();
+
+  resultado = resultado.find((prod) => prod.id === id);
 
   res.setHeader("Content-Type", "application/json");
 

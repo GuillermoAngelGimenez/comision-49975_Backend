@@ -1,14 +1,14 @@
 const fs = require("fs");
+const path = require("path");
 
 class ProductManager {
   constructor(rutaArchivo) {
-    this.path = rutaArchivo;
+    this.products = [];
+    this.path = path.join(__dirname, rutaArchivo);
   }
 
   async getProducts() {
-    console.log(this.path);
     if (fs.existsSync(this.path)) {
-      console.log("existe");
       return JSON.parse(await fs.promises.readFile(this.path, "utf8"));
     } else {
       return [];
