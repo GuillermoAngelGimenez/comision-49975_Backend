@@ -109,5 +109,16 @@
           "stock": 30,
           "category": "accesorios",
           "thumbnails": []
+     },
+     {
+          "id": 14,
+          "title": "teclado genius",
+          "description": "modelo AAA",
+          "code": "ZZZ",
+          "price": "75000",
+          "status": "true",
+          "stock": 17,
+          "category": "accesorios",
+          "thumbnails": []
      }
 ]
