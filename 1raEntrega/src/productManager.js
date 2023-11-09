@@ -34,8 +34,8 @@ class ProductManager {
     }
   }
 
-  async updateProduct(id, prodModificado, products) {
-    //validar si el campo es código, que el mismo no este registrado con otro producto
+  async updateProduct(id, prodModificado) {
+    // validar si el campo es código, que el mismo no este registrado con otro producto
     // if (campo === "code") {
     //   let productoCodigo = await this.getProducts();
     //   let existe = productoCodigo.find((p) => p.code === valor);
@@ -48,7 +48,7 @@ class ProductManager {
     //   }
     // }
 
-    // let products = await this.getProducts();
+    let products = await this.getProducts();
 
     // const indexProduct = products.findIndex((product) => product.id === id);
     // if (indexProduct === -1) {
