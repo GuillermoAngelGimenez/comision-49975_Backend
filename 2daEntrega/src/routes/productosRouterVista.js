@@ -7,10 +7,7 @@ const pm = new ProductManager("products.json");
 
 router.get("/", async (req, res) => {
   let productos = await pm.getProducts();
-
-  res.status(200).render("home", {
-    productos
-  });
+  res.status(200).render("home", { productos });
 });
 
 router.get("/realtimeproducts", async (req, res) => {
@@ -21,4 +18,4 @@ router.get("/realtimeproducts", async (req, res) => {
   res.status(200).render("realTimeProducts", { productos });
 });
 
-export default router;
+exportdefaultrouter;

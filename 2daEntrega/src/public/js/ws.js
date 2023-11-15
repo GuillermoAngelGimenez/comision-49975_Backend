@@ -1,19 +1,19 @@
-console.log("hola, ws.js script...!!");
-
 const socket = io();
 
 socket.on("connect", () => {
   console.log("Conectado al socket");
 });
 
-socket.on("resultado", (productos) => {
-  console.log("Resultado: " + productos);
+socket.on("resultado", () => {
+  console.log("Resultado:");
 });
 
-// socket.on("Se agrego producto con éxito", (datos) => {
-//   console.log(`Producto: ${datos}`);
-// });
+socket.on("add", (product) => {
+  console.log(product);
+  const hr = document.getElementById("test");
+  const div = document.createElement("div");
 
-// socket.on("Se elimino al producto", (datos) => {
-//   console.log(`Producto: ${datos}`);
-// });
+  div.textContent = `${product.title}`;
+
+  hr.innerHTML += div.outerHTML;
+});
