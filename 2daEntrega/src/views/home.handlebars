@@ -1,0 +1,21 @@
+<h2>Listado de Productos</h2>
+<hr>
+
+    {{#each productos}} 
+        <div>
+            <h4>{{this.title}}</h4>
+            <p>Descripción: {{this.description}}</p>
+            <p>Precio: {{this.price}} - Stock: {{this.stock}} </p>
+            <hr>
+        </div>
+    {{/each}}
+
+<hr>
+
+{{!-- <a href="/realTimeProducts">Editar Productos</a> --}}
+<a href="/realtimeproducts">Editar Productos</a>
+
+
+
+
+

@@ -1,10 +1,13 @@
-const { Router } = require("express");
-const path = require("path");
-const fs = require("fs");
+import { Router } from "express";
+import path from "path";
+import fs from "fs";
+import __dirname from "../util.js";
 
 let rutaCarrito = path.join(__dirname, "..", "archivos", "carrito.json");
 
-const ProductManager = require("../productManager");
+// export const router = Router();
+
+import ProductManager from "../productManager.js";
 const pm = new ProductManager("products.json");
 
 function getCarts() {
@@ -162,8 +165,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
   let resultado;
   if (indexProducto !== -1) {
-    // resultado = carritoAModificar.products[indexProducto].quantity + cantidad;
-    resultado = carritoAModificar.products[indexProducto].quantity + 1;
+    resultado = carritoAModificar.products[indexProducto].quantity + cantidad;
 
     otrosProductos = carritoAModificar.products.filter(
       (prod) => prod.idProducto !== pid
@@ -229,4 +231,5 @@ router.post("/:cid/product/:pid", async (req, res) => {
   }
 });
 
-module.exports = router;
+// module.exports = router;
+export default router;

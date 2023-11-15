@@ -7,83 +7,6 @@ const pm = new ProductManager("products.json");
 
 const router = Router();
 
-// function validacionesCamposProd(req, res, products) {
-// body = req.body;
-// let {
-//   title,
-//   description,
-//   code,
-//   price,
-//   status = true,
-//   stock,
-//   category,
-//   thumbnails
-// } = body;
-// // validacion de propiedades permitidas
-// let propPermitidas = [
-//   "title",
-//   "description",
-//   "code",
-//   "price",
-//   "status",
-//   "stock",
-//   "category",
-//   "thumbnails"
-// ];
-// let propRecibidas = Object.keys(body);
-// console.log(propRecibidas);
-// let valido = propRecibidas.every((prop) => propPermitidas.includes(prop));
-// if (!valido) {
-//   res.setHeader("Content-Type", "application/json");
-//   return res.status(400).json({
-//     error: `No se aceptan algunas propiedades`,
-//     propPermitidas
-//   });
-// }
-// // validaciones sobre los tipos de datos permitidos para cada campo
-// let exRegString = /[0-9]/;
-// if (
-//   exRegString.test(title) ||
-//   exRegString.test(description) ||
-//   exRegString.test(code) ||
-//   exRegString.test(category)
-// ) {
-//   res.setHeader("Content-Type", "application/json");
-//   return res.status(400).json({
-//     error: `Los campos title, description, code y category deben ser de tipo string`
-//   });
-// }
-// let exRegNum = /\D/;
-// if (exRegNum.test(price) || exRegNum.test(stock)) {
-//   res.setHeader("Content-Type", "application/json");
-//   return res.status(400).json({
-//     error: `Se debe ingresar un valor numérico para precio y stock`
-//   });
-// }
-// if (status != "true" && status != "false") {
-//   res.setHeader("Content-Type", "application/json");
-//   return res
-//     .status(400)
-//     .json({ error: `El campo status debe ser true o false, ${status}` });
-// }
-// // valicacion de campos obligatorios
-// if (!title || !description || !code || !price || !stock || !category) {
-//   res.setHeader("Content-Type", "application/json");
-//   return res.status(400).json({
-//     error: `Todos los campos a excepción de status y thumbnails son obligatorios`
-//   });
-// }
-// // validar que no se repita el code
-// // let products = pm.getProducts();
-// let existe = products.find((product) => product.code === code);
-// if (existe) {
-//   res.setHeader("Content-Type", "application/json");
-//   return res.status(400).json({
-//     error: `Ya se encuentra registrado un producto con código ${code}`
-//   });
-// }
-// }
-
 router.get("/", async (req, res) => {
   let resultado = await pm.getProducts();
 
@@ -124,114 +47,90 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  let {
-    title,
-    description,
-    code,
-    price,
-    status = true,
-    stock,
-    category,
-    thumbnails
-  } = req.body;
-
   let products = await pm.getProducts();
 
-  // validacionesCamposProd(req, res, products);
+  const body = req.body;
 
-  ///------------------------El código a continuación entre línea 142 y 213 se repite para el POST y para el PUT pero no pude hacer que
-  ///funcione si lo llamo en una función.
-  // validacion de propiedades permitidas
-  let propPermitidas = [
+  const thumbnails = body.thumbnails || [];
+  body.status = body.status || true;
+
+  const requiredFields = [
     "title",
     "description",
-    "code",
     "price",
-    "status",
+    "code",
     "stock",
-    "category",
-    "thumbnails"
+    "category"
   ];
 
-  let propRecibidas = Object.keys(req.body);
-  let valido = propRecibidas.every((prop) => propPermitidas.includes(prop));
-  if (!valido) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `No se aceptan algunas propiedades`,
-      propPermitidas
-    });
+  const missingFields = requiredFields.filter((field) => !(field in req.body));
+
+  if (missingFields.length > 0) {
+    return res
+      .status(400)
+      .json({ error: `Faltan campos requeridos: ${missingFields.join(", ")}` });
   }
 
-  // validaciones sobre los tipos de datos permitidos para cada campo
-  let exRegString = /[0-9]/;
-  if (
-    exRegString.test(title) ||
-    exRegString.test(description) ||
-    exRegString.test(code) ||
-    exRegString.test(category)
-  ) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `Los campos title, description, code y category deben ser de tipo string`
-    });
+  const typeValidation = {
+    title: "string",
+    description: "string",
+    price: "number",
+    code: "string",
+    stock: "number",
+    category: "string",
+    status: "boolean"
+  };
+
+  const invalidFields = Object.entries(typeValidation).reduce(
+    (acc, [field, type]) => {
+      if (body[field] !== undefined) {
+        if (type === "array" && !Array.isArray(body[field])) {
+          acc.push(field);
+        } else if (typeof body[field] !== type) {
+          acc.push(field);
+        }
+      }
+      return acc;
+    },
+    []
+  );
+
+  if (!Array.isArray(thumbnails)) {
+    return res
+      .status(400)
+      .json({ error: "Formato inválido para el campo thumbnails" });
   }
 
-  let exRegNum = /\D/;
-  if (exRegNum.test(price) || exRegNum.test(stock)) {
-    res.setHeader("Content-Type", "application/json");
+  if (invalidFields.length > 0) {
     return res.status(400).json({
-      error: `Se debe ingresar un valor numérico para precio y stock`
-    });
-  }
-
-  if (status.toLowerCase() != "true" && status.toLowerCase() != "false") {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `El campo status debe ser true o false, se esta intentando ingresar el valor: ${status}`
-    });
-  }
-
-  // valicacion de campos obligatorios
-  if (!title || !description || !code || !price || !stock || !category) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `Todos los campos a excepción de status y thumbnails son obligatorios`
+      error: `Tipos de datos inválidos en los campos: ${invalidFields.join(
+        ", "
+      )}`
     });
   }
 
   // validar que no se repita el code
-  // let products = pm.getProducts();
-  let existe = products.find((product) => product.code === code);
+  let existe = products.find((product) => product.code === body.code);
+
   if (existe) {
-    res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `Ya se encuentra registrado un producto con código ${code}`
+      error: `Ya se encuentra registrado un producto con código ${body.code}`
     });
   }
 
-  ///------------------------
-
   let id = 1;
+
   if (products.length > 0) {
     id = products[products.length - 1].id + 1;
   }
 
   let newProduct = {
     id,
-    title,
-    description,
-    code,
-    price,
-    status,
-    stock,
-    category,
-    thumbnails
+    ...body
   };
 
-  pm.addProduct(newProduct);
+  await pm.addProduct(newProduct);
 
-  res.setHeader("Content-Type", "application/json");
   return res.status(201).json({ newProduct });
 });
 
@@ -254,95 +153,105 @@ router.put("/:id", async (req, res) => {
       .json({ error: `No existen un producto con id ${id}` });
   }
 
-  let {
-    title,
-    description,
-    code,
-    price,
-    status = true,
-    stock,
-    category,
-    thumbnails
-  } = req.body;
+  const body = req.body;
 
-  ///------------------------El código a continuación entre línea 257 y 328 se repite para el POST y para el PUT pero no pude hacer que
-  ///funcione si lo llamo en una función.
-  // validacion de propiedades permitidas
-  let propPermitidas = [
+  if (!body || Object.keys(body).length === 0) {
+    return res.status(400).json({
+      error:
+        "El cuerpo de la solicitud está vacío por lo cual no hay nada para editar en el producto"
+    });
+  }
+
+  const camposPermitidos = [
     "title",
     "description",
-    "code",
     "price",
-    "status",
+    "code",
     "stock",
     "category",
+    "status",
     "thumbnails"
   ];
 
-  let propRecibidas = Object.keys(req.body);
-  let valido = propRecibidas.every((prop) => propPermitidas.includes(prop));
-  if (!valido) {
-    res.setHeader("Content-Type", "application/json");
+  // Recorrer las claves y valores del cuerpo del objeto
+  // let contadoKeys = 0;
+  let keysInvalidas = [];
+  // let keysValidas = [];
+  for (const key in body) {
+    if (body.hasOwnProperty(key)) {
+      if (!camposPermitidos.includes(key)) {
+        keysInvalidas.push(key);
+        // } else {
+        //   keysValidas.push(key);
+        // }
+        // contadoKeys++;
+      }
+    }
+  }
+
+  if (keysInvalidas.length > 0) {
     return res.status(400).json({
-      error: `No se aceptan algunas propiedades`,
-      propPermitidas
+      error:
+        "El cuerpo de la solicitud contiene campos invalidos. Campos Invalidos: " +
+        keysInvalidas.join(", ") +
+        "."
     });
   }
 
-  // validaciones sobre los tipos de datos permitidos para cada campo
-  let exRegString = /[0-9]/;
-  if (
-    exRegString.test(title) ||
-    exRegString.test(description) ||
-    exRegString.test(code) ||
-    exRegString.test(category)
-  ) {
-    res.setHeader("Content-Type", "application/json");
+  const typeValidation = {
+    title: "string",
+    description: "string",
+    price: "number",
+    code: "string",
+    stock: "number",
+    category: "string",
+    status: "boolean"
+  };
+
+  const invalidFields = Object.entries(typeValidation).reduce(
+    (acc, [field, type]) => {
+      if (body[field] !== undefined) {
+        if (type === "array" && !Array.isArray(body[field])) {
+          acc.push(field);
+        } else if (typeof body[field] !== type) {
+          acc.push(field);
+        }
+
+        if (body["thumbnails"]) {
+          if (!Array.isArray(body["thumbnails"])) {
+            return res
+              .status(400)
+              .json({ error: "Formato inválido para el campo thumbnails" });
+          }
+        }
+      }
+      return acc;
+    },
+    []
+  );
+
+  if (invalidFields.length > 0) {
     return res.status(400).json({
-      error: `Los campos title, description, code y category deben ser de tipo string`
+      error: `Tipos de datos inválidos en los campos: ${invalidFields.join(
+        ", "
+      )}`
     });
   }
 
-  let exRegNum = /\D/;
-  if (exRegNum.test(price) || exRegNum.test(stock)) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `Se debe ingresar un valor numérico para precio y stock`
-    });
-  }
-
-  if (status.toLowerCase() != "true" && status.toLowerCase() != "false") {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `El campo status debe ser true o false, se esta intentando ingresar el valor: ${status}`
-    });
-  }
-
-  // valicacion de campos obligatorios
-  if (!title || !description || !code || !price || !stock || !category) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `Todos los campos a excepción de status y thumbnails son obligatorios`
-    });
-  }
-
-  // validar que no se repita el code --- NO APLICA AL PUT
-  // let products = pm.getProducts();
+  // validar que no se repita el code ingresado respecto a existente
   let existe = products.find(
-    (product) => product.code === code && product.id !== id
+    (product) => product.code === body.code && product.id !== id
   );
   if (existe) {
     res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `Ya se encuentra registrado un producto con código ${code}`
+      error: `Ya se encuentra registrado un producto con código ${body.code}`
     });
   }
 
-  ///------------------------
-
   let productoModificado = {
     ...products[indiceProduct],
-    ...req.body,
+    ...body,
     id
   };
 

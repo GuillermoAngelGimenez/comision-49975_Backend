@@ -1,5 +1,6 @@
-const fs = require("fs");
-const path = require("path");
+import path from "path";
+import fs from "fs";
+import __dirname from "./util.js";
 
 class ProductManager {
   constructor(archivoJson) {
@@ -16,9 +17,7 @@ class ProductManager {
   }
 
   async addProduct(newProduct) {
-    let { title, description, price, code, stock } = newProduct;
-    console.log(newProduct);
-    console.log(description);
+    let { title, description, price, thumbnail, code, stock } = newProduct;
 
     //Validar Code
     let products = await this.getProducts();
@@ -41,15 +40,26 @@ class ProductManager {
         title === undefined ||
         description === undefined ||
         price === undefined ||
+        // thumbnail === undefined ||
         code === undefined ||
         stock === undefined
       ) {
         console.log(
-          `No se ingresaron todos los valores requeridos para el producto. \nValores ingresados: \n\ttitle: ${title}, description: ${description}, price: ${price}, code: ${code}, stock: ${stock}`
+          `No se ingresaron todos los valores requeridos para el producto. \nValores ingresados: \n\ttitle: ${title}, description: ${description}, price: ${price}, thumbnail: ${thumbnail}, code: ${code}, stock: ${stock}`
         );
         return;
       }
     }
+
+    // let newProduct = {
+    //   id,
+    //   title,
+    //   description,
+    //   price,
+    //   thumbnail,
+    //   code,
+    //   stock
+    // };
 
     products.push(newProduct);
 
@@ -124,4 +134,5 @@ class ProductManager {
   }
 }
 
-module.exports = ProductManager;
+// module.exports = ProductManager;
+export default ProductManager;
