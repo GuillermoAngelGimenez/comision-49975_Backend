@@ -1,20 +1,24 @@
-<div>
-    Todo listo para trabajar con Websockets
-</div>
+<h2>Websockets - Listado actualizado de Productos</h2>
+<br>
 
-<br><br>
-
-<hr id= "test">
+{{!-- <hr id= "test">
     {{#each productos}}
         <div>
             {{this.title}}
-            {{!-- <p>Descripción: {{this.description}}</p>
-            <p>Precio: {{this.price}} - Stock: {{this.stock}} </p>
-            <hr> --}}
         </div>
     {{/each}}
-<hr>
+<hr> --}}
+<ul>
+    {{#each productos}}
+        <li>Prod.: <strong>{{this.title}}</strong></li>
+        {{!-- <li>Prod.: <strong>{{this.title}}</strong> - Descripción: {{this.description}} - Precio: {{this.price}}</li> --}}
+            <hr>
+    {{/each}}
 
-<a href="/">Volver al Listado de Productos</a>
-<script src="[socket.io/socket.io.js"></script>](http://socket.io/socket.io.js%22%3E%3C/script%3E%60%60%60)
+</ul>
+
+
+<a class="btn btn-primary" href="/" role="button">Volver al Listado de Productos</a>
+
+<script src="[socket.io/socket.io.js"></script>
 <script src="../public/js/ws.js"></script>

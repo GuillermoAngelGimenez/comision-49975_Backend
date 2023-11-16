@@ -9,9 +9,6 @@ const pm = new ProductManager("products.json");
 
 router.get("/realtimeproducts", async (req, res) => {
   let productos = await pm.getProducts();
-
-  // res.setHeader("Content-Type", "application/json");
-  // res.status(200).json({ productos });
   res.status(200).render("realTimeProducts", {
     productos
   });

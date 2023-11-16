@@ -5,8 +5,6 @@ import __dirname from "../util.js";
 
 let rutaCarrito = path.join(__dirname, "..", "archivos", "carrito.json");
 
-// export const router = Router();
-
 import ProductManager from "../productManager.js";
 const pm = new ProductManager("products.json");
 
@@ -55,60 +53,17 @@ router.get("/:id", async (req, res) => {
       .status(404)
       .send("El número ingresado no corresponde a un id de carrito existente.");
   } else {
-    let productos = resultado.products;
+    // let productos = resultado.products;
 
-    let idproductos = productos.map((product) => ({
-      idProducto: product.idProducto
-    }));
-    res.status(200).json({ idproductos });
+    // let idproductos = productos.map((product) => ({
+    //   idProducto: product.idProducto
+    // }));
+
+    res.status(200).json({ resultado });
   }
 });
 
 router.post("/", async (req, res) => {
-  let propPermitidas = ["idProducto", "quantity"];
-  let products = await pm.getProducts();
-
-  let arrayProductos = req.body;
-
-  //validacion de propiedades permitidas
-  for (let objeto of arrayProductos) {
-    for (let propiedad in objeto) {
-      if (
-        !objeto.hasOwnProperty("idProducto") ||
-        !objeto.hasOwnProperty("quantity")
-      ) {
-        res.setHeader("Content-Type", "application/json");
-        return res.status(400).json({
-          error: `No se aceptan algunas propiedades. Propiedades permitidas: ${propPermitidas}`
-        });
-      }
-    }
-  }
-
-  let exRegNum = /\D/;
-  //validar que los campos sean de tipo numerico y que el o los productos existan en el listado de produtos
-  for (let objeto of arrayProductos) {
-    // return res.send(`datos ${objeto.idProducto} - ${objeto.quantity}`);
-    if (exRegNum.test(objeto.idProducto) || exRegNum.test(objeto.quantity)) {
-      res.setHeader("Content-Type", "application/json");
-      return res.status(400).json({
-        error: `Se debe ingresar un valor numérico para el id de producto y para la cantidad`
-      });
-    }
-
-    let existeProducto = products.find(
-      (product) => product.id === objeto.idProducto
-    );
-
-    if (!existeProducto) {
-      // se notifica que no se puede agregar al carrito por no existir en el listado principal de productos
-      res.setHeader("Content-Type", "application/json");
-      return res.status(404).json({
-        error: `No se puede agregar el producto porque no existe en el listado principal`
-      });
-    }
-  }
-
   let carrito = await getCarts();
 
   let id = 1;
@@ -118,7 +73,7 @@ router.post("/", async (req, res) => {
 
   let newCarrito = {
     id,
-    products: arrayProductos
+    products: []
   };
 
   carrito.push(newCarrito);
@@ -133,17 +88,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
   let cid = req.params.cid;
   cid = parseInt(cid);
 
-  //validaciones sobre los tipos de datos permitidos para cada campo
-  let exRegCantidad = /\D/;
-  let cantidad = parseInt(req.body);
-  if (exRegCantidad.test(cantidad)) {
-    res.setHeader("Content-Type", "application/json");
-    return res
-      .status(400)
-      .json({ error: `Se debe ingresar un valor numérico para cantidad` });
-  }
-
-  // validar que el id del carrito exista en carrito.json
+  // validar que el id del carrito exista en carrito.json - sino existe no puedo agregar el producto
   let carritos = await getCarts();
   let indexCarrito = carritos.findIndex((carrito) => carrito.id === cid);
   if (indexCarrito === -1) {
@@ -165,7 +110,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
   let resultado;
   if (indexProducto !== -1) {
-    resultado = carritoAModificar.products[indexProducto].quantity + cantidad;
+    resultado = carritoAModificar.products[indexProducto].quantity + 1;
 
     otrosProductos = carritoAModificar.products.filter(
       (prod) => prod.idProducto !== pid
@@ -213,7 +158,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
     let prodModificado = {
       idProducto: pid,
-      quantity: cantidad
+      quantity: 1
     };
 
     otrosProductos.push(prodModificado);
@@ -231,5 +176,4 @@ router.post("/:cid/product/:pid", async (req, res) => {
   }
 });
 
-// module.exports = router;
 export default router;

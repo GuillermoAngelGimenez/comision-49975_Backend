@@ -18,4 +18,4 @@ router.get("/realtimeproducts", async (req, res) => {
   res.status(200).render("realTimeProducts", { productos });
 });
 
-exportdefaultrouter;
+export default router;
