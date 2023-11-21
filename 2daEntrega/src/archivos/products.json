@@ -131,5 +131,95 @@
           "status": true,
           "stock": 13,
           "category": "juegos"
+     },
+     {
+          "id": 18,
+          "title": "Torre de Sonido",
+          "description": "LG",
+          "code": "GGGXBOOM",
+          "price": 350000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 19,
+          "title": "Torre de Sonido 2",
+          "description": "LG",
+          "code": "GGXBOOM2",
+          "price": 370000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 20,
+          "title": "Torre de Sonido 3",
+          "description": "LG",
+          "code": "GGXBOOM4",
+          "price": 355000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 21,
+          "title": "Torre de Sonido 5",
+          "description": "Aiwa 2",
+          "code": "AIWA556",
+          "price": 420000,
+          "status": true,
+          "stock": 7,
+          "category": "musica"
+     },
+     {
+          "id": 22,
+          "title": "Torre de Sonido 6",
+          "description": "Aiwa 3",
+          "code": "AIWA557",
+          "price": 430000,
+          "status": true,
+          "stock": 8,
+          "category": "musica"
+     },
+     {
+          "id": 25,
+          "title": "teclado inalambrico SD",
+          "description": "Genius",
+          "code": "GEN000",
+          "price": 19000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 27,
+          "title": "teclado inalambrico SD3",
+          "description": "Genius",
+          "code": "GEN002",
+          "price": 19000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 28,
+          "title": "teclado inalambrico SD5",
+          "description": "Genius 5",
+          "code": "GEN005",
+          "price": 19500,
+          "status": true,
+          "stock": 5,
+          "category": "musica"
+     },
+     {
+          "id": 29,
+          "title": "teclado inalambrico SD6",
+          "description": "Genius 5",
+          "code": "GEN006",
+          "price": 19500,
+          "status": true,
+          "stock": 5,
+          "category": "musica"
      }
 ]

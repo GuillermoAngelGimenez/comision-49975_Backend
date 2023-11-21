@@ -10,27 +10,29 @@ socket.on("resultado", () => {
 
 socket.on("add", (product) => {
   console.log(product);
-  // const hr = document.getElementById("test");
-  // const div = document.createElement("div");
-
-  // div.textContent = `${product.title}`;
-
-  // hr.innerHTML += div.outerHTML;
 
   let ullistaProd = document.querySelector("ul");
   let lielemProd = document.createElement("li");
-  // lielemProd.innerHTML = `Título: ${product.title} - Descripción: ${product.description} - Precio: ${product.price}`;
-  lielemProd.innerHTML = `Título: ${product.title}`;
+  let lielemhr = document.createElement("hr");
+
+  lielemProd.setAttribute("data-id", product.id);
+  lielemProd.innerHTML = `Título: <strong>${product.title}</strong> - Descripción: ${product.description} - Precio: ${product.price}`;
   ullistaProd.innerHTML += lielemProd.outerHTML;
 });
 
 socket.on("delete", (productId) => {
   let ullistaProd = document.querySelector("ul");
-  let liProdDelete = document.querySelector(
-    `li[data-product-id"${productId}"]`
-  );
 
-  if (liProdDelete) {
-    ullistaProd.removeChild(liProdDelete);
+  let lilistaProd = ullistaProd.getElementsByTagName("li");
+
+  for (var i = 0; i < lilistaProd.length; i++) {
+    let li = lilistaProd[i];
+
+    let dataId = li.getAttribute("data-id");
+
+    if (parseInt(dataId) === productId) {
+      li.remove();
+      break;
+    }
   }
 });

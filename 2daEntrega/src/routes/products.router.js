@@ -1,6 +1,5 @@
 import { Router } from "express";
-// import path from "path";
-// import fs from "fs";
+import { io } from "../app.js";
 
 export const router = Router();
 
@@ -13,8 +12,6 @@ router.get("/", async (req, res) => {
   if (req.query.limit) {
     resultado = resultado.slice(0, req.query.limit);
   }
-
-  // io.emit("resultado", resultado);
 
   res.setHeader("Content-Type", "application/json");
   res.status(200).json({ resultado });
@@ -181,17 +178,11 @@ router.put("/:id", async (req, res) => {
   ];
 
   // Recorrer las claves y valores del cuerpo del objeto
-  // let contadoKeys = 0;
   let keysInvalidas = [];
-  // let keysValidas = [];
   for (const key in body) {
     if (body.hasOwnProperty(key)) {
       if (!camposPermitidos.includes(key)) {
         keysInvalidas.push(key);
-        // } else {
-        //   keysValidas.push(key);
-        // }
-        // contadoKeys++;
       }
     }
   }

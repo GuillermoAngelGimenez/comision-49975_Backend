@@ -53,12 +53,6 @@ router.get("/:id", async (req, res) => {
       .status(404)
       .send("El número ingresado no corresponde a un id de carrito existente.");
   } else {
-    // let productos = resultado.products;
-
-    // let idproductos = productos.map((product) => ({
-    //   idProducto: product.idProducto
-    // }));
-
     res.status(200).json({ resultado });
   }
 });

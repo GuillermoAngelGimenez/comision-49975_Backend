@@ -27,7 +27,7 @@ const serverHTTP = app.listen(PORT, () => {
   console.log(`Server escuchando en puerto ${PORT}`);
 });
 
-const io = new Server(serverHTTP);
+export const io = new Server(serverHTTP);
 
 app.set("io", io);
 

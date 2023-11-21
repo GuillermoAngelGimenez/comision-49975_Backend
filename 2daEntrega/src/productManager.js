@@ -51,16 +51,6 @@ class ProductManager {
       }
     }
 
-    // let newProduct = {
-    //   id,
-    //   title,
-    //   description,
-    //   price,
-    //   thumbnail,
-    //   code,
-    //   stock
-    // };
-
     products.push(newProduct);
 
     await fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
@@ -80,19 +70,6 @@ class ProductManager {
   }
 
   async updateProduct(id, prodModificado) {
-    // validar si el campo es código, que el mismo no este registrado con otro producto
-    // if (campo === "code") {
-    //   let productoCodigo = await this.getProducts();
-    //   let existe = productoCodigo.find((p) => p.code === valor);
-
-    //   if (existe) {
-    //     console.log(
-    //       `El código "${valor}" ya lo tiene asignado otro producto registrado.`
-    //     );
-    //     return;
-    //   }
-    // }
-
     let products = await this.getProducts();
 
     const indexProduct = products.findIndex((product) => product.id === id);
@@ -102,14 +79,6 @@ class ProductManager {
       );
       return;
     }
-
-    // if (products[indexProduct].hasOwnProperty(campo)) {
-    //   products[indexProduct][campo] = valor;
-    //   fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
-    //   console.log(`El producto con id ${id} se modificó con éxito`);
-    // } else {
-    //   console.log("Los productos no poseen el campo suministrado.");
-    // }
 
     products[id] = prodModificado;
     fs.promises.writeFile(this.path, JSON.stringify(products, null, 5));
@@ -134,5 +103,4 @@ class ProductManager {
   }
 }
 
-// module.exports = ProductManager;
 export default ProductManager;
