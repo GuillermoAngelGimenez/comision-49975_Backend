@@ -1,0 +1,15 @@
+<h2>Websockets - Listado actualizado de Productos</h2>
+<br>
+
+<ul>
+    {{#each productos}}
+        <li data-id={{this.id}}>Título: <strong>{{this.title}}</strong> - Descripción: {{this.description}} - Precio: {{this.price}}</li>
+    {{/each}}
+ 
+</ul>
+
+
+<a class="btn btn-primary" href="/" role="button">Volver al Listado de Productos</a>
+
+<script src="socket.io/socket.io.js"></script>
+<script src="../public/js/ws.js"></script>
