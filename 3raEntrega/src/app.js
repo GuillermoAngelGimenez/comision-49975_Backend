@@ -10,6 +10,9 @@ import { httpSocket } from "./middleware/socket.js";
 
 import mongoose from "mongoose";
 
+import { messagesModelo } from "./dao/models/managerMessages.js";
+// import mongoose from "mongoose";
+
 const PORT = 8080;
 const app = express();
 
@@ -31,13 +34,35 @@ const serverHTTP = app.listen(PORT, () => {
 
 export const io = new Server(serverHTTP);
 
+let usuarios = [];
+let mensajes = [];
+
 app.set("io", io);
 
 io.on("connection", (socket) => {
-  console.log(`Nuevo Cliente conectado con id ${socket.id}`);
+  console.log(`Se ha conectado un cliente con id ${socket.id}`);
+
+  socket.on("id", (nombre) => {
+    usuarios.push({ nombre, id: socket.id });
+    socket.broadcast.emit("nuevoUsuario", nombre);
+    socket.emit("Hola", mensajes);
+  });
+
+  socket.on("mensaje", (datos) => {
+    usuarios.push(datos);
+    io.emit("nuevoMensaje", datos);
+
+    let { emisor, mensaje } = datos;
+    let user = emisor;
+    let message = mensaje;
+    messagesModelo.create({ user, message });
+  });
 
   socket.on("disconnect", () => {
-    console.log("Usuario desconectado");
+    let usuario = usuarios.find((u) => u.id === socket.id);
+    if (usuario) {
+      io.emit("usuarioDesconectado", usuario.nombre);
+    }
   });
 });
 
@@ -49,5 +74,5 @@ try {
 
   console.log("DB Online...!!!");
 } catch (error) {
-  console.log(error.message);
+  console.log(error.usuario);
 }

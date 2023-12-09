@@ -10,6 +10,7 @@ socket.on("resultado", () => {
 
 socket.on("add", (product) => {
   console.log(product);
+  console.log("me agrego");
 
   let ullistaProd = document.querySelector("ul");
   let lielemProd = document.createElement("li");
@@ -21,6 +22,7 @@ socket.on("add", (product) => {
 });
 
 socket.on("delete", (productId) => {
+  console.log("llegue aca");
   let ullistaProd = document.querySelector("ul");
 
   let lilistaProd = ullistaProd.getElementsByTagName("li");
@@ -30,7 +32,10 @@ socket.on("delete", (productId) => {
 
     let dataId = li.getAttribute("data-id");
 
-    if (parseInt(dataId) === productId) {
+    console.log(dataId);
+    console.log(productId);
+    if (dataId === productId) {
+      console.log("es igual");
       li.remove();
       break;
     }

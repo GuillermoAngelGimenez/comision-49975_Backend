@@ -162,7 +162,7 @@ router.post("/", async (req, res) => {
 
   try {
     let nuevoProducto = await productsModelo.create(newProduct);
-    // io.emit("add", newProduct);
+    io.emit("add", newProduct);
     res.setHeader("Content-Type", "application/json");
     return res.status(201).json({ payload: nuevoProducto });
   } catch (error) {
@@ -340,7 +340,8 @@ router.delete("/:id", async (req, res) => {
   let existe;
   try {
     existe = await productsModelo.findOne({ deleted: false, _id: id });
-    console.log(existe);
+    // console.log(existe);
+    console.log("producto eliminado");
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
@@ -349,14 +350,14 @@ router.delete("/:id", async (req, res) => {
     });
   }
 
+  const io = req.app.get("io");
+
   // if (!existe) {
   //   res.setHeader("Content-Type", "application/json");
   //   return res
   //     .status(400)
   //     .json({ error: `No existe un producto con id ${id}` });
   // }
-
-  const io = req.app.get("io");
 
   let resultado;
   try {
@@ -366,6 +367,7 @@ router.delete("/:id", async (req, res) => {
     );
 
     io.emit("delete", id);
+
     if (resultado.modifiedCount > 0) {
       res.setHeader("Content-Type", "application/json");
       return res

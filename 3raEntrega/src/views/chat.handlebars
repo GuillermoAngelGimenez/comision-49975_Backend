@@ -1,15 +1,15 @@
 <h2>CHAT</h2>
 <br>
 
-{{!-- <ul>
-    {{#each productos}}
-        <li data-id={{this.id}}>Título: <strong>{{this.title}}</strong> - Descripción: {{this.description}} - Precio: {{this.price}}</li>
-    {{/each}}
- 
-</ul> --}}
+<hr>
 
+<div id="mensajes"></div>
+<input type="text" id="mensaje">
+
+<br><br>
 
 <a class="btn btn-primary" href="/" role="button">Volver al Listado de Productos</a>
 
 <script src="socket.io/socket.io.js"></script>
-<script src="../public/js/ws.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../public/js/chat.js"></script>
