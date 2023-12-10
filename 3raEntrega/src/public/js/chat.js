@@ -20,9 +20,10 @@ Swal.fire({
   socket.on("nuevoUsuario", (nombre) => {
     Swal.fire({
       text: `${nombre} se ha conectado...!!!`,
-      toast: true,
+      // toast: true,
       position: "top-right",
-      timer: 5000,
+      timer: 4000,
+      showConfirmButton: true,
       timerProgressBar: true
     });
   });
@@ -41,8 +42,11 @@ Swal.fire({
   socket.on("usuarioDesconectado", (nombre) => {
     Swal.fire({
       text: `${nombre} se ha desconectado...!!!`,
-      toast: true,
-      position: "top-right"
+      // toast: true,
+      position: "top-right",
+      timer: 4000,
+      showConfirmButton: true,
+      timerProgressBar: true
     });
   });
 

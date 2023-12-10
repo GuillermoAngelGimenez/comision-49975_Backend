@@ -11,7 +11,6 @@ import { httpSocket } from "./middleware/socket.js";
 import mongoose from "mongoose";
 
 import { messagesModelo } from "./dao/models/managerMessages.js";
-// import mongoose from "mongoose";
 
 const PORT = 8080;
 const app = express();
@@ -55,7 +54,7 @@ io.on("connection", (socket) => {
     let { emisor, mensaje } = datos;
     let user = emisor;
     let message = mensaje;
-    // messagesModelo.create({ user, message });
+    messagesModelo.create({ user, message });
   });
 
   socket.on("disconnect", () => {
