@@ -2,10 +2,16 @@ body {
   background-color: #f2f2f2;
   font-family: Arial, sans-serif;
   margin-left: 10rem;
+  margin-right: 10rem;
+  margin-bottom: 2rem;
 }
 
-h1{
+h1, h2{
   color: blue;
+  font-weight: bolder;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: center;
 }
 
 h2 {
@@ -18,13 +24,29 @@ hr {
   margin: 20px 0;
 }
 
-
-a{
-    padding-bottom: 3rem;
+.botones-principal{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: black solid 1px;
+  border-radius: 15px;
+  padding: 1rem;
+  margin-left: 13rem;
+  margin-right: 13rem;
 }
 
+a{
+    width: 13rem;
+}
 
-input[type="text"], input[type="email"], input[type="password"], input[type="submit"] {
+.botones-websocket, .botones-chat{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* input[type="text"], input[type="email"], input[type="password"], input[type="submit"] {
   display: block;
   margin: 10px 0;
   padding: 10px;
@@ -38,7 +60,7 @@ input[type="submit"] {
   background-color: #333;
   color: #fff;
   cursor: pointer;
-}
+} */
 
 h4 {
   color: #333;
@@ -82,3 +104,32 @@ ul li {
 .menu a:hover {
   color: #ccc;
 }
+
+
+#mensajes{
+  margin-top: 15px;
+  /* width: 95%; */
+  height: 380px;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 5px #333 inset;
+  line-height: 0.5rem;
+  padding-top: 2rem;
+  padding-left: 2rem;
+  border-radius: 10px;
+  background: rgb(33,125,123);
+  background: linear-gradient(68deg, rgba(33,125,123,1) 29%, rgba(120,209,120,1) 63%);
+}
+
+#mensaje{
+  width: 80%;
+}
+
+.mensaje{
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: rgb(93, 88, 143);
+  display: inline-block;
+}
+
+

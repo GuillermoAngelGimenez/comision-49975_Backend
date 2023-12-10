@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
     let { emisor, mensaje } = datos;
     let user = emisor;
     let message = mensaje;
-    messagesModelo.create({ user, message });
+    // messagesModelo.create({ user, message });
   });
 
   socket.on("disconnect", () => {

@@ -21,7 +21,9 @@ Swal.fire({
     Swal.fire({
       text: `${nombre} se ha conectado...!!!`,
       toast: true,
-      position: "top-right"
+      position: "top-right",
+      timer: 5000,
+      timerProgressBar: true
     });
   });
 
