@@ -56,28 +56,28 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  let carritos = [];
+  let carritos;
   try {
     carritos = await cartsModelo.find();
   } catch (error) {
     console.log(error.message);
   }
 
-  res.setHeader("Content-Type", "application/json");
-  res.status(200).json({ carritos });
+  const io = req.app.get("io");
 
-  let id = 1;
-  if (carritos.length > 0) {
-    id = carritos[carritos.length - 1].id + 1;
-  }
+  // -------------
+
+  // res.setHeader("Content-Type", "application/json");
+  // res.status(200).json({ carritos });
 
   let newCarrito = {
-    id,
+    // id,
     products: []
   };
 
   try {
     let nuevoCarrito = await cartsModelo.create({ newCarrito });
+    console.log(nuevoCarrito);
     res.setHeader("Content-Type", "application/json");
     return res.status(200).json({ payload: nuevoCarrito });
   } catch (error) {

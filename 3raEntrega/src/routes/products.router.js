@@ -131,7 +131,6 @@ router.post("/", async (req, res) => {
       deleted: false,
       _code: body.code
     });
-    console.log(existe);
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
@@ -147,16 +146,7 @@ router.post("/", async (req, res) => {
     });
   }
 
-  let id = 1;
-
-  if (existe !== null && products.length > 0) {
-    id = products[products.length - 1].id + 1;
-  }
-
-  let newProduct = {
-    id,
-    ...body
-  };
+  let newProduct = { ...body };
 
   console.log(newProduct);
 
@@ -185,7 +175,6 @@ router.put("/:id", async (req, res) => {
   let existe;
   try {
     existe = await productsModelo.findOne({ deleted: false, _id: id });
-    console.log(existe);
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
@@ -193,6 +182,9 @@ router.put("/:id", async (req, res) => {
       detalle: error.message
     });
   }
+
+  // WebSocket
+  const io = req.app.get("io");
 
   // if (!existe) {
   //   res.setHeader("Content-Type", "application/json");
@@ -297,9 +289,9 @@ router.put("/:id", async (req, res) => {
 
   if (existe) {
     res.setHeader("Content-Type", "application/json");
-    return res
-      .status(400)
-      .json({ error: `El producto con código ${code} ya existe en BD...!!!` });
+    return res.status(400).json({
+      error: `El producto con código ${body.code} ya existe en BD...!!!`
+    });
   }
 
   let resultado;
@@ -308,7 +300,13 @@ router.put("/:id", async (req, res) => {
       { deleted: false, _id: id },
       body
     );
-    console.log(resultado);
+
+    let productActualizado = await productsModelo.findOne({
+      deleted: false,
+      _id: id
+    });
+    io.emit("update", productActualizado);
+
     if (resultado.modifiedCount > 0) {
       res.setHeader("Content-Type", "application/json");
       return res
@@ -340,7 +338,6 @@ router.delete("/:id", async (req, res) => {
   let existe;
   try {
     existe = await productsModelo.findOne({ deleted: false, _id: id });
-    // console.log(existe);
     console.log("producto eliminado");
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
