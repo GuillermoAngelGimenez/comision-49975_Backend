@@ -1,0 +1,41 @@
+<h1>Listado de Productos Páginados</h1>
+
+    {{#each productos}} 
+        <div class="productos-paginados">
+            <h4>{{this.title}}</h4>
+            <p><b>Descripción: </b>{{this.description}}</p>
+            <p><b>Precio: </b>{{this.price}} - Stock: {{this.stock}} </p>
+            <p><b>Categoria: </b>{{this.category}} </p>
+            
+            <div>
+                <button class="addCarrito btn btn-primary">Agregar al Carrito</button>
+            </div>
+            
+        </div>
+        <br>
+    {{/each}}
+
+<div class="controles-paginado">
+<a href="/products/?pagina=1">Pág.1</a>
+
+{{#if hasPrevPage}}
+    <a href="/products/?pagina={{prevPage}}">Pág.Ant.</a>
+{{else}}
+    <span>Pág.Ant.</span>
+{{/if}}
+
+{{#if hasNextPage}}
+    <a href="/products/?pagina={{nextPage}}">Pág.Sig.</a>
+{{else}}
+    <span>Pág.Sig.</span>
+{{/if}}
+
+<a href="/products/?pagina={{totalPages}}">Ult.Pág.</a>
+
+</div>
+
+<div class="botones-websocket">
+    <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
+</div>
+
+

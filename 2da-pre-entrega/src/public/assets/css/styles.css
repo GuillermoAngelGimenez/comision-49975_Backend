@@ -46,22 +46,6 @@ a{
   justify-content: center;
 }
 
-/* input[type="text"], input[type="email"], input[type="password"], input[type="submit"] {
-  display: block;
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-input[type="submit"] {
-  background-color: #333;
-  color: #fff;
-  cursor: pointer;
-} */
-
 h4 {
   color: #333;
   margin: 20px 0;
@@ -132,4 +116,62 @@ ul li {
   display: inline-block;
 }
 
+.productos-paginados{
+  border: 2px solid #555;
+  border-radius: 5px;
+  padding-left: 1.5rem;
+  background-color: rgb(122, 116, 130);
+}
 
+.productos-paginados h4{
+  font-weight: bold;
+  padding-left: 2rem;
+  color: rgb(116, 11, 116);
+}
+
+.productos-paginados div{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.productos-paginados p{
+  margin-bottom: 3px;
+}
+
+.addCarrito{
+  margin-right: 5rem;
+  margin-bottom: 0.5rem;
+}
+
+.controles-paginado{
+  text-align: center;
+}
+
+/* Estilos para los enlaces de paginación */
+a {
+  color: blue;
+  text-decoration: none;
+  margin-right: 20px;
+  transition: text-shadow 0.3s ease-in-out;
+  font-weight: bolder;
+}
+
+/* Estilos para los enlaces de paginación al pasar el cursor sobre ellos */
+a:hover {
+  color: darkblue;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+  /* Estilos para los enlaces de paginación inactivos */
+  span {
+    color: gray;
+    margin-right: 20px;
+  }
+  
+  /* Estilos para el campo de entrada de página */
+  input {
+    width: 50px;
+    margin-left: 10px;
+  }
+  

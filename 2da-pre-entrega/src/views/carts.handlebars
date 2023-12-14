@@ -1,0 +1,18 @@
+<h1>Productos del carrito seleccionado</h1>
+
+    {{#each carrito}} 
+        <div class="productos-paginados">
+            <h4>{{this.products.title}}</h4>
+            <p><b>Descripción: </b>{{this.description}}</p>
+            <p><b>Precio: </b>{{this.price}} - Stock: {{this.stock}} </p>
+            <p><b>Categoria: </b>{{this.category}} </p>
+        </div>
+        <br>
+    {{/each}}
+
+
+{{!-- <div class="botones-websocket">
+    <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
+</div> --}}
+
+

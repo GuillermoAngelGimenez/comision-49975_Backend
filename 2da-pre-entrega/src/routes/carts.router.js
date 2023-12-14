@@ -39,8 +39,6 @@ router.get("/:id", async (req, res) => {
     existe = await cartsModelo
       .findOne({ _id: id })
       .populate("products.idProducto");
-
-    console.log("estoy aca", existe);
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
@@ -318,12 +316,6 @@ router.put("/:cid/product/:pid", async (req, res) => {
       }
     }
 
-    // -----------------
-
-    // otrosProductos = carritoAModificar.products.filter(
-    //   (prod) => prod.idProducto !== pid
-    // );
-
     let otrosProductos = existe.products.filter(
       (producto) => producto.idProducto.toString() !== pid
     );
@@ -338,11 +330,6 @@ router.put("/:cid/product/:pid", async (req, res) => {
       id: cid,
       products: otrosProductos
     };
-
-    // console.log(prodModificado);
-    // console.log("------------------------");
-    // console.log(cartModificado);
-    // return;
 
     let resultado;
     try {
