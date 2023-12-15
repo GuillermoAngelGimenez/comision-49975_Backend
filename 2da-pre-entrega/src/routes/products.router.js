@@ -23,12 +23,40 @@ router.get("/", async (req, res) => {
       console.log(error);
     }
 
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json({ resultado });
+    let { totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } =
+      resultado;
 
-    res.status(200).render("products", {
-      resultado: resultado.docs
-    });
+    let prevL =
+      hasPrevPage === false
+        ? null
+        : `http://localhost:8080/api/products?pagina=${prevPage}`;
+
+    let nextL =
+      hasNextPage === false
+        ? null
+        : `http://localhost:8080/api/products?pagina=${nextPage}`;
+
+    // generacion de objeto
+    let objetoMongoDB = {
+      status: "success/error",
+      payload: resultado,
+      // totalPages: totalPages,
+      //   prevPage: prevPage,
+      //   nextPage: nextPage,
+      //   page: pagina,
+      //   hasPrevPage: hasPrevPage,
+      //   hasNextPage: hasNextPage,
+      prevLink: prevL,
+      nextLink: nextL
+    };
+
+    //------------------
+
+    // res.setHeader("Content-Type", "application/json");
+    // res.status(200).json({ resultado });
+
+    res.setHeader("Content-Type", "application/json");
+    res.status(200).json({ objetoMongoDB });
   } else if (req.query.limit) {
     resultado = await productsModelo.find({ deleted: false });
     resultado = resultado.slice(0, req.query.limit);
@@ -50,60 +78,44 @@ router.get("/", async (req, res) => {
         .json({ error: "El parámetro sort debe ser asc o desc." });
     }
   } else {
-    resultado = await productsModelo.find({ deleted: false });
-    resultado = resultado.slice(0, 10);
-    res.setHeader("Content-Type", "application/json");
-    res.status(200).json({ resultado });
+    const paramQuery = req.query;
+
+    for (let clave in paramQuery) {
+      if (paramQuery.hasOwnProperty(clave)) {
+        let valor = paramQuery[clave];
+
+        if (clave === "category") {
+          resultado = await productsModelo.find({
+            deleted: false,
+            category: valor
+          });
+          res.setHeader("Content-Type", "application/json");
+          res.status(200).json({ resultado });
+        }
+
+        if (clave === "stock") {
+          resultado = await productsModelo.find({
+            deleted: false,
+            stock: valor
+          });
+          res.setHeader("Content-Type", "application/json");
+          res.status(200).json({ resultado });
+        }
+
+        if (clave !== "stock" && clave !== "category") {
+          console.log(
+            `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
+          );
+          res.setHeader("Content-Type", "application/json");
+          res
+            .status(200)
+            .json(
+              `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
+            );
+        }
+      }
+    }
   }
-
-  // try {
-  //   resultado = await productsModelo.find({ deleted: false });
-  //   // console.log(req.query.limit);
-  //   if (req.query.limit) {
-  //     resultado = resultado.slice(0, req.query.limit);
-  //   } else {
-  //     // si no recibe un limite, devuelve 10 productos
-  //     resultado = resultado.slice(0, 10);
-  //   }
-
-  //   res.setHeader("Content-Type", "application/json");
-  //   res.status(200).json({ resultado });
-  // } catch (error) {
-  //   console.log(error.message);
-  // }
-
-  // query
-  // console.log(req.query.filter);
-  // let filtroparam = req.query.filtro;
-  // if (filtroparam) {
-  //   let param = filtroparam.split("=")[0];
-  //   let valor = filtroparam.split("=")[1];
-  //   console.log("param");
-  //   console.log("valor");
-
-  //   switch (param) {
-  //     case "title":
-  //       console.log("Seleccionaste la opción title");
-  //       resultado = await productsModelo.find({ deleted: false, param: valor });
-  //       break;
-  //     case "code":
-  //       console.log("Seleccionaste la opción code");
-  //       break;
-  //     case "status":
-  //       console.log("Seleccionaste la opción status");
-  //       break;
-  //     case "stock":
-  //       console.log("Seleccionaste la opción stock");
-  //       break;
-  //     case "category":
-  //       console.log("Seleccionaste la opción category");
-  //       break;
-  //     default:
-  //       return res
-  //         .status(400)
-  //         .json({ error: `El parámetro ${param} no es válido.` });
-  //   }
-  // }
 });
 
 router.get("/:id", async (req, res) => {
@@ -135,7 +147,7 @@ router.get("/:id", async (req, res) => {
   // }
 
   res.setHeader("Content-Type", "application/json");
-  return res.status(200).json({ usuario: existe });
+  return res.status(200).json({ producto: existe });
 });
 
 router.post("/", async (req, res) => {
