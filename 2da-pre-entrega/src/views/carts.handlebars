@@ -1,18 +1,51 @@
-<h1>Productos del carrito seleccionado</h1>
+  <style>
+    /* Estilos CSS para el diseño de filas y columnas */
+    .producto {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .columna {
+      flex: 5;
+      padding: 10px;
+      box-sizing: border-box;
+      flex-direction: row;
+      width: 20rem;
+      color: blue;
+    }
+    .columna-1 {
+      flex: 1;
+      padding: 10px;
+      box-sizing: border-box;
+      flex-direction: row;
+    }
+  </style>
 
-    {{#each carrito}} 
-        <div class="productos-paginados">
-            <h4>{{this.products.title}}</h4>
-            <p><b>Descripción: </b>{{this.description}}</p>
-            <p><b>Precio: </b>{{this.price}} - Stock: {{this.stock}} </p>
-            <p><b>Categoria: </b>{{this.category}} </p>
+{{#if carrito.products}}
+    <h2>Productos del carrito seleccionado</h2>
+    <br>
+
+    {{#each carrito.products}}
+    <div class="producto">
+        <div class="columna">
+            <h5><b>{{this.idProducto.title}}</b></h5>
         </div>
-        <br>
+        <div class="columna-1">
+            <p>{{this.idProducto.code}}</p>
+        </div>
+        <div class="columna-1">
+            <p><b>Cant.: </b>{{this.quantity}} </p>
+        </div>
+        <div class="columna-1">
+            <p><b>$</b>{{this.idProducto.price}}</p>
+        </div>
+    </div>
+    <hr>
     {{/each}}
 
+    <p class="total-carrito">Total: ${{totalAcumulado}}</p>
 
-{{!-- <div class="botones-websocket">
-    <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
-</div> --}}
+{{else}}
+    <h4 class="mensaje-sin-productos">El carrito indicado no contiene productos</h4>
 
+{{/if}}
 

@@ -7,6 +7,7 @@ import routerProductos from "./routes/products.router.js";
 import routerCarts from "./routes/carts.router.js";
 import { Server } from "socket.io";
 import { httpSocket } from "./middleware/socket.js";
+import handlebars from "handlebars";
 
 import mongoose from "mongoose";
 
@@ -14,6 +15,11 @@ import { messagesModelo } from "./dao/models/managerMessages.js";
 
 const PORT = 8080;
 const app = express();
+
+// Define un helper JSON para formatear un objeto como JSON
+handlebars.registerHelper("json", function (context) {
+  return JSON.stringify(context);
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

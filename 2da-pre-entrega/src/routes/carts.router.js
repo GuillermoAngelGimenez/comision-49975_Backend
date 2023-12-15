@@ -38,7 +38,8 @@ router.get("/:id", async (req, res) => {
   try {
     existe = await cartsModelo
       .findOne({ _id: id })
-      .populate("products.idProducto");
+      .populate("products.idProducto")
+      .lean();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({

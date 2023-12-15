@@ -78,7 +78,8 @@ router.get("/:id", async (req, res) => {
   try {
     carrito = await cartsModelo
       .findOne({ _id: id })
-      .populate("products.idProducto");
+      .populate("products.idProducto")
+      .lean();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
@@ -87,9 +88,18 @@ router.get("/:id", async (req, res) => {
     });
   }
 
-  console.log(carrito);
+  // console.log(carrito.products);
 
-  res.status(200).render("carts", { carrito });
+  let totalAcumulado = 0;
+  carrito.products.forEach((producto) => {
+    let subtotal = producto.quantity * producto.idProducto.price;
+    totalAcumulado += subtotal;
+    // Puedes hacer otros cálculos o acciones aquí en cada iteración si es necesario
+  });
+
+  // console.log(totalAcumulado);
+
+  res.status(200).render("carts", { carrito, totalAcumulado });
 });
 
 export default router;
