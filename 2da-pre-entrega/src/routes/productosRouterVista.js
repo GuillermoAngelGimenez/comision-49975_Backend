@@ -94,7 +94,6 @@ router.get("/carts/:id", async (req, res) => {
   carrito.products.forEach((producto) => {
     let subtotal = producto.quantity * producto.idProducto.price;
     totalAcumulado += subtotal;
-    // Puedes hacer otros cálculos o acciones aquí en cada iteración si es necesario
   });
 
   // console.log(totalAcumulado);

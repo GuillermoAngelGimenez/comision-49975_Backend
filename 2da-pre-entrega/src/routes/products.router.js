@@ -77,8 +77,8 @@ router.get("/", async (req, res) => {
         .status(400)
         .json({ error: "El parámetro sort debe ser asc o desc." });
     }
-  } else {
-    const paramQuery = req.query;
+  } else if (req.query) {
+    let paramQuery = req.query;
 
     for (let clave in paramQuery) {
       if (paramQuery.hasOwnProperty(clave)) {
@@ -102,18 +102,27 @@ router.get("/", async (req, res) => {
           res.status(200).json({ resultado });
         }
 
-        if (clave !== "stock" && clave !== "category") {
-          console.log(
-            `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
-          );
-          res.setHeader("Content-Type", "application/json");
-          res
-            .status(200)
-            .json(
-              `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
-            );
-        }
+        // if (clave !== "stock" && clave !== "category") {
+        //   console.log(
+        //     `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
+        //   );
+        //   res.setHeader("Content-Type", "application/json");
+        //   res
+        //     .status(200)
+        //     .json(
+        //       `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
+        //     );
+        // }
       }
+    }
+
+    try {
+      resultado = await productsModelo.find({ deleted: false });
+      resultado = resultado.slice(0, 10);
+      res.setHeader("Content-Type", "application/json");
+      res.status(200).json({ resultado });
+    } catch (error) {
+      console.log(error);
     }
   }
 });
@@ -146,8 +155,13 @@ router.get("/:id", async (req, res) => {
   //   return res.status(400).json({ error: `No existe un usuario con id ${id}` });
   // }
 
-  res.setHeader("Content-Type", "application/json");
-  return res.status(200).json({ producto: existe });
+  if (existe === null) {
+    res.setHeader("Content-Type", "application/json");
+    return res.status(200).json(`El producto indicado con id ${id} no existe.`);
+  } else {
+    res.setHeader("Content-Type", "application/json");
+    return res.status(200).json({ producto: existe });
+  }
 });
 
 router.post("/", async (req, res) => {
@@ -225,7 +239,7 @@ router.post("/", async (req, res) => {
   try {
     existe = await productsModelo.findOne({
       deleted: false,
-      _code: body.code
+      code: body.code
     });
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
@@ -238,24 +252,26 @@ router.post("/", async (req, res) => {
   if (existe) {
     res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `El producto con código ${code} ya existe en la BD...!!!`
+      error: `El producto con código ${body.code} ya existe en la BD...!!!`
     });
   }
 
   let newProduct = { ...body };
-
   console.log(newProduct);
 
   try {
     let nuevoProducto = await productsModelo.create(newProduct);
+    console.log(nuevoProducto);
     io.emit("add", newProduct);
+    console.log("hola");
     res.setHeader("Content-Type", "application/json");
     return res.status(201).json({ payload: nuevoProducto });
   } catch (error) {
+    console.log("Error");
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message + "ni idea "
     });
   }
 });
@@ -407,7 +423,7 @@ router.put("/:id", async (req, res) => {
       res.setHeader("Content-Type", "application/json");
       return res
         .status(200)
-        .json({ payload: "Modificacion realizada con éxito" });
+        .json({ payload: "Modificacion realizada con éxito." });
     } else {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({ error: `No se concretó la modificación` });
@@ -415,9 +431,9 @@ router.put("/:id", async (req, res) => {
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
-      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`
     });
+    // return res.status(500).json({error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, detalle: error.message});
   }
 });
 
@@ -465,7 +481,7 @@ router.delete("/:id", async (req, res) => {
       res.setHeader("Content-Type", "application/json");
       return res
         .status(200)
-        .json({ payload: "La Eliminacion se realizó con éxito" });
+        .json({ payload: "La Eliminacion se realizó con éxito." });
     } else {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({ error: `No se concretó la eliminacion` });

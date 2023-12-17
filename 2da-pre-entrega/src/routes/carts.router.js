@@ -254,7 +254,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
   }
 });
 
-router.put("/:cid/product/:pid", async (req, res) => {
+router.put("/:cid/products/:pid", async (req, res) => {
   let cid = req.params.cid;
 
   if (!mongoose.Types.ObjectId.isValid(cid)) {
@@ -370,7 +370,103 @@ router.put("/:cid/product/:pid", async (req, res) => {
   }
 });
 
-router.delete("/:cid/product/:pid", async (req, res) => {
+router.put("/:cid", async (req, res) => {
+  let cid = req.params.cid;
+
+  if (!mongoose.Types.ObjectId.isValid(cid)) {
+    res.setHeader("Content-Type", "application/json");
+    return res
+      .status(400)
+      .json({ error: `Ingrese un id válido para el carrito...!!!` });
+  }
+  // validar que el id del carrito exista
+  let existe;
+  try {
+    existe = await cartsModelo.findOne({ _id: cid });
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    return res.status(500).json({
+      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+      detalle: error.message
+    });
+  }
+
+  if (!existe) {
+    res.setHeader("Content-Type", "application/json");
+    return res
+      .status(400)
+      .json({ error: `No existe un carrito con id ${cid}` });
+  }
+
+  //-------------------------
+  let body = req.body;
+  let arrayProductos = [];
+  arrayProductos = await productsModelo.find({}, "_id");
+
+  arrayProductos = arrayProductos.map((objeto) => objeto._id.toHexString());
+  let noExisten = [];
+  let siExisten = [];
+  let siExistenV = [];
+  let nuevoProd;
+  let prodOri;
+  let agregar;
+
+  for (let i = 0; i < body.length; i++) {
+    agregar = 0;
+    nuevoProd = body[i].idProducto.toString();
+    for (let j = 0; j < arrayProductos.length; j++) {
+      prodOri = arrayProductos[j].toString();
+
+      if (nuevoProd === prodOri) {
+        agregar = 1;
+      }
+    }
+
+    if (agregar == 1) {
+      siExisten.push({
+        idProducto: body[i].idProducto,
+        quantity: body[i].quantity
+      });
+      siExistenV.push(body[i].idProducto);
+    } else {
+      noExisten.push(body[i].idProducto);
+    }
+  }
+
+  console.log(noExisten);
+  console.log(siExisten);
+
+  if (siExisten.length === 0) {
+    res
+      .status(400)
+      .send(
+        "Ninguno de los productos existen. No se pueden agregar al carrito"
+      );
+  } else {
+    await cartsModelo.updateOne(
+      { _id: cid },
+      {
+        $set: {
+          products: siExisten
+        }
+      }
+    );
+
+    if (noExisten.length !== 0) {
+      res
+        .status(200)
+        .send(
+          `Se agregaron al carrito los productos: ${siExistenV}. Los productos ${noExisten} no se pueden agregar al carrito.`
+        );
+    } else {
+      res
+        .status(200)
+        .send(`Se agregaron al carrito los productos: ${siExistenV}.`);
+    }
+  }
+});
+
+router.delete("/:cid/products/:pid", async (req, res) => {
   let cid = req.params.cid;
 
   if (!mongoose.Types.ObjectId.isValid(cid)) {
