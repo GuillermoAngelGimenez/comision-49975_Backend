@@ -16,6 +16,7 @@
     "mongoos": "^0.0.1-security",
     "mongoose": "^8.0.2",
     "mongoose-paginate-v2": "^1.7.4",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "toastify-js": "^1.12.0"
   }
 }

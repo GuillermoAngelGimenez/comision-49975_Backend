@@ -1,19 +1,18 @@
 <h1>Listado de Productos Páginados</h1>
 
-    {{#each productos}} 
-        <div class="productos-paginados">
+<ul>
+    {{#each productos}}
+        <li class="productos-paginados" data-id={{this._id}}>
             <h4>{{this.title}}</h4>
-            <p><b>Descripción: </b>{{this.description}}</p>
-            <p><b>Precio: </b>{{this.price}} - Stock: {{this.stock}} </p>
-            <p><b>Categoria: </b>{{this.category}} </p>
-            
+            <p><strong>Descripción:</strong> {{this.description}} - <strong>Precio:</strong> ${{this.price}}</p>
             <div>
-                <button class="addCarrito btn btn-primary">Agregar al Carrito</button>
+                <button class="addCarrito btn btn-primary" data-product-id="{{this._id}}">Agregar al Carrito</button>
             </div>
-            
-        </div>
-        <br>
+        </li>
     {{/each}}
+</ul>
+<br>
+
 
 <div class="controles-paginado">
 <a href="/products/?pagina=1">Pág.1</a>
@@ -38,4 +37,54 @@
     <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
 </div>
 
+
+{{!-- {{#each productos}} 
+        <div class="productos-paginados">
+            <h4>{{this.title}}</h4>
+            <p><b>Descripción: </b>{{this.description}}</p>
+            <p><b>Precio: </b>{{this.price}} - Stock: {{this.stock}} </p>
+            <p><b>Categoria: </b>{{this.category}} </p>
+            
+            <div>
+                <button class="addCarrito btn btn-primary">Agregar al Carrito</button>
+            </div>
+            
+        </div>
+        <br>
+{{/each}} --}}
+
+
+<script>
+    function handleAddToCartClick(event) {
+        let cid = '657a105368dbce28a5484694';
+        let pid = event.target.getAttribute('data-product-id');
+
+        let url = '/api/carts/' + cid + '/product/' + pid;
+
+        fetch(url, {
+            method: 'POST', 
+            body:
+            console.log(url)
+        }).then(response => response.json())
+        .then(data => {
+            Toastify({
+                text: "Se agrego el producto",
+                duration: 3000,
+                gravity: "bottom",
+                position: "right",
+                style: {
+                    background: "linear-gradient(to right, grey, black)",
+                }
+            }).showToast();
+
+        console.log(`Producto agregado con éxito al carrito ${cid}`);
+        })
+    };
+
+        document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('addCarrito')) {
+            handleAddToCartClick(event);
+        }
+    });
+</script>
 
