@@ -1,0 +1,25 @@
+{
+  "name": "2da_desafio_Clase19",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-handlebars": "^7.1.2",
+    "express-session": "^1.17.3",
+    "mongoos": "^0.0.1-security",
+    "mongoose": "^8.0.2",
+    "mongoose-paginate-v2": "^1.7.4",
+    "session-file-store": "^1.5.0",
+    "socket.io": "^4.7.2",
+    "toastify-js": "^1.12.0"
+  }
+}
