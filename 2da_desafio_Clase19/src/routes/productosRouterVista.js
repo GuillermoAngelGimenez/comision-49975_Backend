@@ -5,16 +5,36 @@ import mongoose from "mongoose";
 
 export const router = Router();
 
-router.get("/", async (req, res) => {
-  let productos = [];
-  try {
-    productos = await productsModelo.find({ deleted: false }).lean();
-  } catch (error) {
-    console.log(error.message);
+const auth = (req, res, next) => {
+  if (!req.session.usuario) {
+    res.redirect("/login");
   }
 
-  res.status(200).render("home", { productos });
+  next();
+};
+
+router.get("/", async (req, res) => {
+  res.status(200).render("login");
 });
+
+router.get("/registrate", (req, res) => {
+  // let { error } = req.query;
+
+  res.setHeader("Content-Type", "text/html");
+  // res.status(200).render("registro", { error });
+  res.status(200).render("registrate");
+});
+
+// router.get("/", async (req, res) => {
+//   let productos = [];
+//   try {
+//     productos = await productsModelo.find({ deleted: false }).lean();
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+
+//   res.status(200).render("home", { productos });
+// });
 
 router.get("/realtimeproducts", async (req, res) => {
   let productos = [];

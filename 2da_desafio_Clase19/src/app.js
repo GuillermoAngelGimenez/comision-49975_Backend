@@ -2,7 +2,12 @@ import express from "express";
 import __dirname from "./util.js";
 import path from "path";
 import { engine } from "express-handlebars";
+
+import sessions from "express-session";
+import mongoStore from "connect-mongo";
+
 import { router as productosRouterVista } from "./routes/productosRouterVista.js";
+import { router as sessionRouter } from "./routes/session.router.js";
 import routerProductos from "./routes/products.router.js";
 import routerCarts from "./routes/carts.router.js";
 import { Server } from "socket.io";
@@ -12,8 +17,24 @@ import mongoose from "mongoose";
 
 import { messagesModelo } from "./dao/models/managerMessages.js";
 
+import { usuariosModelo } from "./dao/models/managerUsuarios.js";
+
 const PORT = 8080;
 const app = express();
+
+app.use(
+  sessions({
+    secret: "codercoder123",
+    resave: true,
+    saveUninitialized: true,
+    store: mongoStore.create({
+      mongoUrl:
+        "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority",
+      mongoOptions: { dbName: "ecommerce" },
+      ttl: 3600
+    })
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +47,8 @@ app.set("views", path.join(__dirname, "/views"));
 app.use("/api/products", httpSocket, routerProductos);
 app.use("/api/carts", routerCarts);
 app.use("/", productosRouterVista);
+
+app.use("/api/sessions", sessionRouter);
 
 const serverHTTP = app.listen(PORT, () => {
   console.log(`Server escuchando en puerto ${PORT}`);
