@@ -188,3 +188,61 @@ a:hover {
     font-size: 1.2rem;
   }
 
+.login{
+  border: 3px solid blue;
+  border-radius: 2rem;
+  padding: 0.5rem;
+  width: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form h4{
+  text-align: center;
+  font-weight: bold;
+} 
+
+.tituloHome{
+  height: 3rem;
+}
+
+.botonesHome{
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 2px;
+} 
+
+.registro{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.formRegistro{
+  border: 2px solid black;
+  border-radius: 3rem;
+  padding: 1rem;
+}
+
+.registrar{
+  display: flex;
+  justify-content: right;
+}
+
+.botonLogin{
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
+
+h5 i strong{
+  text-transform: capitalize;
+}
+
+.botonLogout{
+  display: flex;
+  justify-content: right;
+}

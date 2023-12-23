@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { productsModelo } from "../dao/models/managerProducts.js";
+import { usuariosModelo } from "../dao/models/managerUsuarios.js";
 import { cartsModelo } from "../dao/models/managerCarts.js";
 import mongoose from "mongoose";
 
@@ -13,28 +14,30 @@ const auth = (req, res, next) => {
   next();
 };
 
-router.get("/", async (req, res) => {
-  res.status(200).render("login");
-});
-
 router.get("/registrate", (req, res) => {
-  // let { error } = req.query;
+  let { error } = req.query;
 
   res.setHeader("Content-Type", "text/html");
-  // res.status(200).render("registro", { error });
-  res.status(200).render("registrate");
+  res.status(200).render("registrate", { error });
 });
 
-// router.get("/", async (req, res) => {
-//   let productos = [];
-//   try {
-//     productos = await productsModelo.find({ deleted: false }).lean();
-//   } catch (error) {
-//     console.log(error.message);
-//   }
+router.get("/login", (req, res) => {
+  let { error, mensaje } = req.query;
 
-//   res.status(200).render("home", { productos });
-// });
+  res.setHeader("Content-Type", "text/html");
+  res.status(200).render("login", { error, mensaje });
+});
+
+router.get("/", async (req, res) => {
+  let productos = [];
+  try {
+    productos = await productsModelo.find({ deleted: false }).lean();
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  res.status(200).render("home", { productos });
+});
 
 router.get("/realtimeproducts", async (req, res) => {
   let productos = [];
@@ -55,6 +58,8 @@ router.get("/chat", (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
+  let usuario = req.session.usuario;
+
   let pagina = 1;
 
   if (req.query.pagina) {
@@ -80,7 +85,8 @@ router.get("/products", async (req, res) => {
     hasNextPage,
     hasPrevPage,
     prevPage,
-    nextPage
+    nextPage,
+    usuario
   });
 });
 

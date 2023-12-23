@@ -1,5 +1,33 @@
-<h1>Listado de Productos Páginados</h1>
+<hr>
+<div class="row">
 
+    {{#if usuario.nombre}}
+        <div class="col-4">
+            <h5><i> Bienvenido/a, <strong>{{usuario.nombre}}  {{usuario.apellido}}</strong></i>.</h5>
+        </div>
+        <div class="col-2">
+            <h6><i> Rol: User.</i></h6>
+        </div>
+        <div class="col-6 botonLogout">
+            <a class="btn btn-outline-secondary btn-sm w-25" href="/login" role="button">Logout</a>
+        </div>  
+    {{else}}
+        <div class="col-6">
+            <h5><i> Bienvenido <strong>Administrador "adminCoder@coder.com"</strong></i>.</h5>
+        </div>
+        <div class="col-2">
+            <h6><i> Rol: Admin.</i></h6>
+        </div>
+        <div class="col-4 botonLogout">
+            <a class="btn btn-outline-secondary btn-sm w-25" href="/login" role="button">Logout</a>
+        </div>  
+    {{/if}}
+
+</div>
+
+<div class="row">
+    <h1>Listado de Productos Páginados</h1>
+</div>
 <ul>
     {{#each productos}}
         <li class="productos-paginados" data-id={{this._id}}>
@@ -36,23 +64,6 @@
 <div class="botones-websocket">
     <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
 </div>
-
-
-{{!-- {{#each productos}} 
-        <div class="productos-paginados">
-            <h4>{{this.title}}</h4>
-            <p><b>Descripción: </b>{{this.description}}</p>
-            <p><b>Precio: </b>{{this.price}} - Stock: {{this.stock}} </p>
-            <p><b>Categoria: </b>{{this.category}} </p>
-            
-            <div>
-                <button class="addCarrito btn btn-primary">Agregar al Carrito</button>
-            </div>
-            
-        </div>
-        <br>
-{{/each}} --}}
-
 
 <script>
     function handleAddToCartClick(event) {
