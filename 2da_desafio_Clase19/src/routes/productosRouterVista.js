@@ -36,6 +36,8 @@ router.get("/", async (req, res) => {
     console.log(error.message);
   }
 
+  console.log(req.session.usuario.nombre);
+  console.log("--------------");
   res.status(200).render("home", { productos });
 });
 
@@ -57,7 +59,7 @@ router.get("/chat", (req, res) => {
   res.status(200).render("chat");
 });
 
-router.get("/products", async (req, res) => {
+router.get("/products", auth, async (req, res) => {
   let usuario = req.session.usuario;
 
   let pagina = 1;

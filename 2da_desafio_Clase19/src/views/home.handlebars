@@ -3,9 +3,13 @@
         <h1>Listado de Productos</h1>
     </div>
     <div class="col-2 botonesHome">
-        <a class="btn btn-outline-secondary btn-sm" href="/registrate" role="button">Registrate</a>
-        <br>
-        <a class="btn btn-outline-secondary btn-sm" href="/login" role="button">Login</a>
+        {{#if req.session.usuario.email}}
+            <a class="btn btn-outline-secondary btn-sm w-25" href="/login" role="button">Logout</a>
+        {{else}}
+            <a class="btn btn-outline-secondary btn-sm" href="/registrate" role="button">Registrate</a>
+            <br>
+            <a class="btn btn-outline-secondary btn-sm" href="/login" role="button">Login</a>
+        {{/if}}
     </div>
 </div>
 <hr>
