@@ -36,8 +36,8 @@ router.get("/", async (req, res) => {
     console.log(error.message);
   }
 
-  console.log(req.session.usuario.nombre);
-  console.log("--------------");
+  // console.log(req.session.usuario.nombre);
+  // console.log("--------------");
   res.status(200).render("home", { productos });
 });
 
