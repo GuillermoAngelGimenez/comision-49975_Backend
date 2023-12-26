@@ -3,15 +3,16 @@
         <h1>Listado de Productos</h1>
     </div>
     <div class="col-2 botonesHome">
-        {{#if req.session.usuario.email}}
-            <a class="btn btn-outline-secondary btn-sm w-25" href="/login" role="button">Logout</a>
-        {{else}}
+        {{!-- {{#if usuario}}
+            <a class="btn btn-outline-secondary btn-sm w-75" href="/login" role="button">Logout</a>
+        {{else}} --}}
             <a class="btn btn-outline-secondary btn-sm" href="/registrate" role="button">Registrate</a>
             <br>
             <a class="btn btn-outline-secondary btn-sm" href="/login" role="button">Login</a>
-        {{/if}}
+        {{!-- {{/if}} --}}
     </div>
 </div>
+
 <hr>
 
     {{#each productos}} 

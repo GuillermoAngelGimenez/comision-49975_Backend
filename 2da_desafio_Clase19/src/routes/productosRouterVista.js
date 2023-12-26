@@ -8,11 +8,19 @@ export const router = Router();
 
 const auth = (req, res, next) => {
   if (!req.session.usuario) {
-    res.redirect("/login");
+    return res.redirect("/login");
   }
 
   next();
 };
+
+// const auth2 = (req, res, next) => {
+//   if (req.session.usuario) {
+//     return res.redirect("/");
+//   }
+
+//   next();
+// };
 
 router.get("/registrate", (req, res) => {
   let { error } = req.query;
@@ -36,12 +44,12 @@ router.get("/", async (req, res) => {
     console.log(error.message);
   }
 
-  // console.log(req.session.usuario.nombre);
+  let usuario = req.session.usuario;
   // console.log("--------------");
-  res.status(200).render("home", { productos });
+  res.status(200).render("home", { productos, usuario });
 });
 
-router.get("/realtimeproducts", async (req, res) => {
+router.get("/realtimeproducts", auth, async (req, res) => {
   let productos = [];
   try {
     productos = await productsModelo.find({ deleted: false }).lean();
@@ -55,7 +63,7 @@ router.get("/realtimeproducts", async (req, res) => {
   res.status(200).render("realTimeProducts", { productos });
 });
 
-router.get("/chat", (req, res) => {
+router.get("/chat", auth, (req, res) => {
   res.status(200).render("chat");
 });
 
@@ -88,17 +96,17 @@ router.get("/products", auth, async (req, res) => {
     hasPrevPage,
     prevPage,
     nextPage,
-    usuario
+    usuario,
   });
 });
 
-router.get("/carts/:id", async (req, res) => {
+router.get("/carts/:id", auth, async (req, res) => {
   let { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `El id ${id} no corresponde a ningún carrito existente...!!!`
+      error: `El id ${id} no corresponde a ningún carrito existente...!!!`,
     });
   }
 
@@ -112,7 +120,7 @@ router.get("/carts/:id", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 

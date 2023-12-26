@@ -5,6 +5,16 @@ import mongoose from "mongoose";
 
 export const router = Router();
 
+const auth = (req, res, next) => {
+  if (!req.session.usuario) {
+    return res.redirect("/login");
+  }
+
+  next();
+};
+
+router.use(auth);
+
 router.get("/", async (req, res) => {
   let resultado = [];
   let pagina = 1;
@@ -47,13 +57,10 @@ router.get("/", async (req, res) => {
       //   hasPrevPage: hasPrevPage,
       //   hasNextPage: hasNextPage,
       prevLink: prevL,
-      nextLink: nextL
+      nextLink: nextL,
     };
 
     //------------------
-
-    // res.setHeader("Content-Type", "application/json");
-    // res.status(200).json({ resultado });
 
     res.setHeader("Content-Type", "application/json");
     res.status(200).json({ objetoMongoDB });
@@ -87,7 +94,7 @@ router.get("/", async (req, res) => {
         if (clave === "category") {
           resultado = await productsModelo.find({
             deleted: false,
-            category: valor
+            category: valor,
           });
           res.setHeader("Content-Type", "application/json");
           res.status(200).json({ resultado });
@@ -96,23 +103,11 @@ router.get("/", async (req, res) => {
         if (clave === "stock") {
           resultado = await productsModelo.find({
             deleted: false,
-            stock: valor
+            stock: valor,
           });
           res.setHeader("Content-Type", "application/json");
           res.status(200).json({ resultado });
         }
-
-        // if (clave !== "stock" && clave !== "category") {
-        //   console.log(
-        //     `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
-        //   );
-        //   res.setHeader("Content-Type", "application/json");
-        //   res
-        //     .status(200)
-        //     .json(
-        //       `La clave: '${clave}' no es válida. La clave debe ser 'category' o 'stock'`
-        //     );
-        // }
       }
     }
 
@@ -146,7 +141,7 @@ router.get("/:id", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -185,7 +180,7 @@ router.post("/", async (req, res) => {
     "price",
     "code",
     "stock",
-    "category"
+    "category",
   ];
 
   const missingFields = requiredFields.filter((field) => !(field in req.body));
@@ -203,7 +198,7 @@ router.post("/", async (req, res) => {
     code: "string",
     stock: "number",
     category: "string",
-    status: "boolean"
+    status: "boolean",
   };
 
   const invalidFields = Object.entries(typeValidation).reduce(
@@ -230,7 +225,7 @@ router.post("/", async (req, res) => {
     return res.status(400).json({
       error: `Tipos de datos inválidos en los campos: ${invalidFields.join(
         ", "
-      )}`
+      )}`,
     });
   }
 
@@ -239,20 +234,20 @@ router.post("/", async (req, res) => {
   try {
     existe = await productsModelo.findOne({
       deleted: false,
-      code: body.code
+      code: body.code,
     });
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
   if (existe) {
     res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `El producto con código ${body.code} ya existe en la BD...!!!`
+      error: `El producto con código ${body.code} ya existe en la BD...!!!`,
     });
   }
 
@@ -271,7 +266,7 @@ router.post("/", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message + "ni idea "
+      detalle: error.message + "ni idea ",
     });
   }
 });
@@ -291,7 +286,7 @@ router.put("/:id", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -310,7 +305,7 @@ router.put("/:id", async (req, res) => {
   if (!body || Object.keys(body).length === 0) {
     return res.status(400).json({
       error:
-        "El cuerpo de la solicitud está vacío por lo cual no hay nada para editar en el producto"
+        "El cuerpo de la solicitud está vacío por lo cual no hay nada para editar en el producto",
     });
   }
 
@@ -322,7 +317,7 @@ router.put("/:id", async (req, res) => {
     "stock",
     "category",
     "status",
-    "thumbnails"
+    "thumbnails",
   ];
 
   // Recorrer las claves y valores del cuerpo del objeto
@@ -340,7 +335,7 @@ router.put("/:id", async (req, res) => {
       error:
         "El cuerpo de la solicitud contiene campos invalidos. Campos Invalidos: " +
         keysInvalidas.join(", ") +
-        "."
+        ".",
     });
   }
 
@@ -351,7 +346,7 @@ router.put("/:id", async (req, res) => {
     code: "string",
     stock: "number",
     category: "string",
-    status: "boolean"
+    status: "boolean",
   };
 
   const invalidFields = Object.entries(typeValidation).reduce(
@@ -380,7 +375,7 @@ router.put("/:id", async (req, res) => {
     return res.status(400).json({
       error: `Tipos de datos inválidos en los campos: ${invalidFields.join(
         ", "
-      )}`
+      )}`,
     });
   }
 
@@ -389,20 +384,20 @@ router.put("/:id", async (req, res) => {
   try {
     existe = await productsModelo.findOne({
       deleted: false,
-      code: body.code
+      code: body.code,
     });
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
   if (existe) {
     res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `El producto con código ${body.code} ya existe en BD...!!!`
+      error: `El producto con código ${body.code} ya existe en BD...!!!`,
     });
   }
 
@@ -415,7 +410,7 @@ router.put("/:id", async (req, res) => {
 
     let productActualizado = await productsModelo.findOne({
       deleted: false,
-      _id: id
+      _id: id,
     });
     io.emit("update", productActualizado);
 
@@ -431,7 +426,7 @@ router.put("/:id", async (req, res) => {
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
-      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`
+      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
     });
     // return res.status(500).json({error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, detalle: error.message});
   }
@@ -443,7 +438,7 @@ router.delete("/:id", async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `El id ingresado no corresponde a un producto existente...!!!`
+      error: `El id ingresado no corresponde a un producto existente...!!!`,
     });
   }
 
@@ -455,7 +450,7 @@ router.delete("/:id", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -490,7 +485,7 @@ router.delete("/:id", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 });

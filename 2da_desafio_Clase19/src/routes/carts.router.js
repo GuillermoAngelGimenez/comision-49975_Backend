@@ -8,6 +8,16 @@ import mongoose from "mongoose";
 
 const router = Router();
 
+const auth = (req, res, next) => {
+  if (!req.session.usuario) {
+    return res.redirect("/login");
+  }
+
+  next();
+};
+
+router.use(auth);
+
 router.get("/", async (req, res) => {
   let carritos = [];
   try {
@@ -30,7 +40,7 @@ router.get("/:id", async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.setHeader("Content-Type", "application/json");
     return res.status(400).json({
-      error: `El id ${id} no corresponde a ningún carrito existente...!!!`
+      error: `El id ${id} no corresponde a ningún carrito existente...!!!`,
     });
   }
 
@@ -44,14 +54,9 @@ router.get("/:id", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
-
-  // if (!existe) {
-  //   res.setHeader("Content-Type", "application/json");
-  //   return res.status(400).json({ error: `No existe un carrito con id ${id}` });
-  // }
 
   res.setHeader("Content-Type", "application/json");
   return res.status(200).json(existe);
@@ -67,14 +72,9 @@ router.post("/", async (req, res) => {
 
   const io = req.app.get("io");
 
-  // -------------
-
-  // res.setHeader("Content-Type", "application/json");
-  // res.status(200).json({ carritos });
-
   let newCarrito = {
     // id,
-    products: []
+    products: [],
   };
 
   try {
@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 });
@@ -108,7 +108,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -142,14 +142,14 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
     let prodModificado = {
       idProducto: pid,
-      quantity: cantidad
+      quantity: cantidad,
     };
 
     otrosProductos.push(prodModificado);
 
     let cartModificado = {
       id: cid,
-      products: otrosProductos
+      products: otrosProductos,
     };
     console.log(cartModificado);
 
@@ -176,7 +176,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
         error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: error.message
+        detalle: error.message,
       });
     }
   } else {
@@ -197,14 +197,14 @@ router.post("/:cid/product/:pid", async (req, res) => {
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
         error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: error.message
+        detalle: error.message,
       });
     }
 
     if (!existe) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({
-        error: `No existe un producto con id ${pid}. No se puede agregar al carrito`
+        error: `No existe un producto con id ${pid}. No se puede agregar al carrito`,
       });
     }
 
@@ -215,7 +215,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
     let prodModificado = {
       idProducto: pid,
-      quantity: 1
+      quantity: 1,
     };
 
     otrosProductos.push(prodModificado);
@@ -223,7 +223,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
     let cartModificado = {
       id: cid,
-      products: otrosProductos
+      products: otrosProductos,
     };
 
     let resultado;
@@ -248,7 +248,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
         error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: error.message
+        detalle: error.message,
       });
     }
   }
@@ -271,7 +271,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -323,13 +323,13 @@ router.put("/:cid/products/:pid", async (req, res) => {
 
     let prodModificado = {
       idProducto: pid,
-      quantity: cantNueva
+      quantity: cantNueva,
     };
 
     otrosProductos.push(prodModificado);
     let cartModificado = {
       id: cid,
-      products: otrosProductos
+      products: otrosProductos,
     };
 
     let resultado;
@@ -355,7 +355,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
         error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: error.message
+        detalle: error.message,
       });
     }
   } else {
@@ -387,7 +387,7 @@ router.put("/:cid", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -425,7 +425,7 @@ router.put("/:cid", async (req, res) => {
     if (agregar == 1) {
       siExisten.push({
         idProducto: body[i].idProducto,
-        quantity: body[i].quantity
+        quantity: body[i].quantity,
       });
       siExistenV.push(body[i].idProducto);
     } else {
@@ -447,8 +447,8 @@ router.put("/:cid", async (req, res) => {
       { _id: cid },
       {
         $set: {
-          products: siExisten
-        }
+          products: siExisten,
+        },
       }
     );
 
@@ -485,7 +485,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -512,9 +512,9 @@ router.delete("/:cid/products/:pid", async (req, res) => {
         {
           $pull: {
             products: {
-              idProducto: pid
-            }
-          }
+              idProducto: pid,
+            },
+          },
         }
       );
 
@@ -564,7 +564,7 @@ router.delete("/:cid", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     return res.status(500).json({
       error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message
+      detalle: error.message,
     });
   }
 
@@ -587,8 +587,8 @@ router.delete("/:cid", async (req, res) => {
       { _id: cid },
       {
         $set: {
-          products: []
-        }
+          products: [],
+        },
       }
     );
 

@@ -245,4 +245,5 @@ h5 i strong{
 .botonLogout{
   display: flex;
   justify-content: right;
+  height: 2rem;
 }
