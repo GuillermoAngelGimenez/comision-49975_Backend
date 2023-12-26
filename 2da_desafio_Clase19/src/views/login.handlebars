@@ -1,4 +1,17 @@
-<h2>Bienvenido a la Web de ....</h2>
+<br>
+{{#if login}}
+    {{!-- ------------ --}}
+{{else}}
+    <div class="row tituloHome">
+        <div class="col-10">
+            <h2>Bienvenido a la Web de ....</h2>
+        </div>
+        <div class="col-2 botonesHome">
+            <a class="btn btn-outline-secondary btn-sm w-50" href="/registrate" role="button">Registrate</a>
+        </div>
+    </div>
+{{/if}}
+
 <br>
 <div class="container login">
   <div class="row">
@@ -35,6 +48,9 @@
 
 <br><br>
 
-<div class="botones-principal">
-    <a class="btn btn-primary" href="/" role="button">Volver</a>
-</div>
+{{!-- {{#if login}}
+    <div class="botones-principal">
+        <a class="btn btn-primary" href="/" role="button">Volver</a>
+    </div>
+{{/if}} --}}
+

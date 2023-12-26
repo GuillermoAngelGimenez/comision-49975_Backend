@@ -12,7 +12,7 @@ router.post("/login", async (req, res) => {
 
   if (email === "adminCoder@coder.com" && pass === "adminCod3r123") {
     req.session.usuario = {
-      email: "adminCoder@coder.com"
+      email: "adminCoder@coder.com",
     };
     res.redirect("/products");
   } else {
@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
     req.session.usuario = {
       nombre: usuario.nombre,
       apellido: usuario.apellido,
-      email: usuario.email
+      email: usuario.email,
     };
 
     res.redirect("/products");
@@ -71,7 +71,7 @@ router.post("/registro", async (req, res) => {
       nombre,
       apellido,
       email,
-      password: pass
+      password: pass,
     });
     res.redirect(`/login?mensaje=Usuario ${email} registrado correctamente`);
   } catch (error) {

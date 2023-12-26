@@ -26,27 +26,31 @@ router.get("/registrate", (req, res) => {
   let { error } = req.query;
 
   res.setHeader("Content-Type", "text/html");
-  res.status(200).render("registrate", { error });
+  res.status(200).render("registrate", { error, login: false });
 });
 
 router.get("/login", (req, res) => {
   let { error, mensaje } = req.query;
 
   res.setHeader("Content-Type", "text/html");
-  res.status(200).render("login", { error, mensaje });
+  res.status(200).render("login", { error, mensaje, login: false });
 });
 
 router.get("/", async (req, res) => {
-  let productos = [];
-  try {
-    productos = await productsModelo.find({ deleted: false }).lean();
-  } catch (error) {
-    console.log(error.message);
-  }
+  // let productos = [];
+  // try {
+  //   productos = await productsModelo.find({ deleted: false }).lean();
+  // } catch (error) {
+  //   console.log(error.message);
+  // }
 
-  let usuario = req.session.usuario;
-  // console.log("--------------");
-  res.status(200).render("home", { productos, usuario });
+  // let usuario = req.session.usuario;
+  // res.status(200).render("home", { productos, usuario });
+
+  res.setHeader("Content-Type", "text/html");
+  res
+    .status(200)
+    .render("login", { login: req.session.usuario ? true : false });
 });
 
 router.get("/realtimeproducts", auth, async (req, res) => {
@@ -68,7 +72,17 @@ router.get("/chat", auth, (req, res) => {
 });
 
 router.get("/products", auth, async (req, res) => {
-  let usuario = req.session.usuario;
+  let usuario;
+  let login = false;
+  let administrador = false;
+
+  if (req.session.usuario) {
+    if (req.session.usuario.email === "adminCoder@coder.com") {
+      administrador = true;
+    }
+    login = true;
+    usuario = req.session.usuario;
+  }
 
   let pagina = 1;
 
@@ -87,6 +101,8 @@ router.get("/products", auth, async (req, res) => {
     productos = [];
   }
 
+  // {login: req.session.usuario?true:false}
+
   let { totalPages, hasNextPage, hasPrevPage, prevPage, nextPage } = productos;
 
   res.status(200).render("products", {
@@ -97,6 +113,8 @@ router.get("/products", auth, async (req, res) => {
     prevPage,
     nextPage,
     usuario,
+    login,
+    administrador,
   });
 });
 

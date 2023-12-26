@@ -1,27 +1,31 @@
 <hr>
 <div class="row">
+    {{#if login}}
+        {{#if administrador}}
+            <div class="col-6">
+                <h5><i> Bienvenido <strong>Administrador "adminCoder@coder.com"</strong></i>.</h5>
+            </div>
+            <div class="col-2">
+                <h6><i> Rol: Admin.</i></h6>
+            </div>
+            <div class="col-4 botonLogout">
+                <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
+            </div>
 
-    {{!-- {{#if usuario.nombre}} --}}
-        <div class="col-4">
-            <h5><i> Bienvenido/a, <strong>{{usuario.nombre}}  {{usuario.apellido}}</strong></i>.</h5>
-        </div>
-        <div class="col-2">
-            <h6><i> Rol: User.</i></h6>
-        </div>
-        <div class="col-6 botonLogout">
-            <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
-        </div>  
-    {{!-- {{else}}
-        <div class="col-6">
-            <h5><i> Bienvenido <strong>Administrador "adminCoder@coder.com"</strong></i>.</h5>
-        </div>
-        <div class="col-2">
-            <h6><i> Rol: Admin.</i></h6>
-        </div>
-        <div class="col-4 botonLogout">
-            <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
-        </div>  
-    {{/if}} --}}
+        {{else}}
+            <div class="col-4">
+                <h5><i> Bienvenido/a, <strong>{{usuario.nombre}}  {{usuario.apellido}}</strong></i>.</h5>
+            </div>
+            <div class="col-2">
+                <h6><i> Rol: User.</i></h6>
+            </div>
+            <div class="col-6 botonLogout">
+                <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
+            </div>    
+        {{/if}}
+    {{else}}
+
+    {{/if}}
 
 </div>
 
@@ -61,9 +65,13 @@
 
 </div>
 
-<div class="botones-websocket">
+{{!-- <div class="botones-websocket">
     <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
-</div>
+</div> --}}
+
+<br>
+
+{{>menu}}
 
 <script>
     function handleAddToCartClick(event) {

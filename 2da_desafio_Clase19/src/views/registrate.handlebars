@@ -1,18 +1,14 @@
-<h2>Registro de Usuario:</h2>
-<hr>
-{{!-- <form action="/api/sessions/registro" method="post">
-    {{#if error}}
-        <div style="color: red;">{{error}}</div>
-    {{/if}}
 
-    <input type="text" name="nombre" placeholder="nombre">
-    <input type="text" name="apellido" placeholder="apellido">
-    <input type="email" name="email" placeholder="email">
-    <input type="password" name="password" placeholder="password">
+    <div class="row tituloHome">
+      <div class="col-10">
+        <h2>Registro de Usuario:</h2>
+      </div>
+      <div class="col-2 botonesHome">
+        <a class="btn btn-outline-secondary btn-sm w-50" href="/login" role="button">Login</a>
+      </div>
+    </div>
+
     <br>
-    <input type="submit" value="Registrar">
-</form> --}}
-
 
 <div class="row registro">
   <div class="col-4"></div>
@@ -27,23 +23,18 @@
         <div class="col-md-8 mb-4">
         <label for="nombreReg" class="form-label">Nombre</label>
         <input type="text" name="nombre" class="form-control" id="nombreReg">
-        {{!-- <div class="invalid-feedback">El campo nombre es obligatorio</div> --}}
       </div>
         <div class="col-md-8 mb-4">
         <label for="apellidoReg" class="form-label">Apellido</label>
         <input type="text" name="apellido" class="form-control" id="apellidoReg">
-        {{!-- <div class="invalid-feedback">El campo apellido es obligatorio</div> --}}
       </div>
       <div class="col-md-8 mb-4">
         <label for="emailReg" class="form-label">Email</label>
         <input type="email" name="email" class="form-control" id="emailReg">
-        {{!-- <div class="invalid-feedback">El campo mail es obligatorio</div> --}}
-        {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
       </div>
       <div class="col-md-8 mb-4">
         <label for="passReg" class="form-label">Password</label>
         <input type="password" name="pass" class="form-control" id="passReg">
-        {{!-- <div class="invalid-feedback">El campo password es obligatorio</div> --}}
       </div>
       <div class="registrar">
         <button type="submit" class="btn btn-primary w-50" value="Registrar">Registrar</button>
@@ -54,6 +45,6 @@
 </div>
 <br>
 
-<div class="botones-principal">
+{{!-- <div class="botones-principal">
     <a class="btn btn-primary" href="/" role="button">Volver</a>
-</div>
+</div> --}}
