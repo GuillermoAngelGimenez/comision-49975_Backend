@@ -12,7 +12,7 @@ router.post("/login", async (req, res) => {
 
   if (email === "adminCoder@coder.com" && pass === "adminCod3r123") {
     req.session.usuario = {
-      email: "adminCoder@coder.com",
+      email: "adminCoder@coder.com"
     };
     res.redirect("/products");
   } else {
@@ -31,7 +31,7 @@ router.post("/login", async (req, res) => {
     req.session.usuario = {
       nombre: usuario.nombre,
       apellido: usuario.apellido,
-      email: usuario.email,
+      email: usuario.email
     };
 
     res.redirect("/products");
@@ -50,13 +50,13 @@ router.post("/registro", async (req, res) => {
     /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/;
   console.log(regMail.test(email));
   if (!regMail.test(email)) {
-    return res.redirect("/registro?error=Mail con formato incorrecto...!!!");
+    return res.redirect("/registrate?error=Mail con formato incorrecto...!!!");
   }
 
   let existe = await usuariosModelo.findOne({ email });
   if (existe) {
     return res.redirect(
-      `/registro?error=Existen usuarios con email ${email} en la BD`
+      `/registrate?error=Existen usuarios con email ${email} en la BD`
     );
   }
 
@@ -71,11 +71,13 @@ router.post("/registro", async (req, res) => {
       nombre,
       apellido,
       email,
-      password: pass,
+      password: pass
     });
     res.redirect(`/login?mensaje=Usuario ${email} registrado correctamente`);
   } catch (error) {
-    res.redirect("/registro?error=Error inesperado. Reintente en unos minutos");
+    res.redirect(
+      "/registrate?error=Error inesperado. Reintente en unos minutos"
+    );
   }
 });
 
