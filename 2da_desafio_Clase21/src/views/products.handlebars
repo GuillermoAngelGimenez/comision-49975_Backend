@@ -1,0 +1,109 @@
+<hr>
+<div class="row">
+    {{#if login}}
+        {{#if administrador}}
+            <div class="col-6">
+                <h5><i> Bienvenido <strong>Administrador "adminCoder@coder.com"</strong></i>.</h5>
+            </div>
+            <div class="col-2">
+                <h6><i> Rol: Admin.</i></h6>
+            </div>
+            <div class="col-4 botonLogout">
+                <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
+            </div>
+
+        {{else}}
+            <div class="col-4">
+                <h5><i> Bienvenido/a, <strong>{{usuario.nombre}}  {{usuario.apellido}}</strong></i>.</h5>
+            </div>
+            <div class="col-2">
+                <h6><i> Rol: User.</i></h6>
+            </div>
+            <div class="col-6 botonLogout">
+                <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
+            </div>    
+        {{/if}}
+    {{else}}
+
+    {{/if}}
+
+</div>
+
+<div class="row">
+    <h1>Listado de Productos Páginados</h1>
+</div>
+<ul>
+    {{#each productos}}
+        <li class="productos-paginados" data-id={{this._id}}>
+            <h4>{{this.title}}</h4>
+            <p><strong>Descripción:</strong> {{this.description}} - <strong>Precio:</strong> ${{this.price}}</p>
+            <div>
+                <button class="addCarrito btn btn-primary" data-product-id="{{this._id}}">Agregar al Carrito</button>
+            </div>
+        </li>
+    {{/each}}
+</ul>
+<br>
+
+
+<div class="controles-paginado">
+<a href="/products/?pagina=1">Pág.1</a>
+
+{{#if hasPrevPage}}
+    <a href="/products/?pagina={{prevPage}}">Pág.Ant.</a>
+{{else}}
+    <span>Pág.Ant.</span>
+{{/if}}
+
+{{#if hasNextPage}}
+    <a href="/products/?pagina={{nextPage}}">Pág.Sig.</a>
+{{else}}
+    <span>Pág.Sig.</span>
+{{/if}}
+
+<a href="/products/?pagina={{totalPages}}">Ult.Pág.</a>
+
+</div>
+
+{{!-- <div class="botones-websocket">
+    <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
+</div> --}}
+
+<br>
+
+{{>menu}}
+
+<script>
+    function handleAddToCartClick(event) {
+        let cid = '657a105368dbce28a5484694';
+        let pid = event.target.getAttribute('data-product-id');
+
+        let url = '/api/carts/' + cid + '/product/' + pid;
+
+        fetch(url, {
+            method: 'POST', 
+            body:
+            console.log(url)
+        }).then(response => response.json())
+        .then(data => {
+            Toastify({
+                text: "Se agrego el producto",
+                duration: 3000,
+                gravity: "bottom",
+                position: "right",
+                style: {
+                    background: "linear-gradient(to right, grey, black)",
+                }
+            }).showToast();
+
+        console.log(`Producto agregado con éxito al carrito ${cid}`);
+        })
+    };
+
+        document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('addCarrito')) {
+            handleAddToCartClick(event);
+        }
+    });
+</script>
+
