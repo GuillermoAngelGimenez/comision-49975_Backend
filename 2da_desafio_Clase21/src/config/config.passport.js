@@ -1,20 +1,27 @@
 import passport from "passport";
 import local from "passport-local";
 import { usuariosModelo } from "../dao/models/managerUsuarios.js";
-import { creaHash } from "../util.js";
+import { creaHash, validaPassword } from "../util.js";
 
 export const inicializarPassport = () => {
+  const admin = {
+    id: 0,
+    username: "adminCoder@coder.com",
+    password: "adminCod3r123"
+  };
+
   passport.use(
     "registro",
     new local.Strategy(
       {
         passReqToCallback: true,
-        usernameField: "email"
+        usernameField: "email",
+        passwordField: "pass"
       },
       async (req, username, password, done) => {
         try {
           console.log("Estrategia local registro de Passport...!!!");
-          let { nombre, email } = req.body;
+          let { nombre, apellido, email } = req.body;
 
           if (!nombre || !email || !password) {
             return res.redirect("/registrate?error=Complete todos los campos");
@@ -40,7 +47,7 @@ export const inicializarPassport = () => {
             return done(null, false);
           }
 
-          pass = creaHash(pass);
+          password = creaHash(password);
 
           let usuario;
           try {
@@ -48,7 +55,7 @@ export const inicializarPassport = () => {
               nombre,
               apellido,
               email,
-              password: pass
+              password
             });
 
             // res.redirect(
@@ -72,7 +79,8 @@ export const inicializarPassport = () => {
     "login",
     new local.Strategy(
       {
-        usernameField: "email"
+        usernameField: "email",
+        passwordField: "pass"
       },
       async (username, password, done) => {
         try {
@@ -84,14 +92,11 @@ export const inicializarPassport = () => {
             return done(null, false);
           }
 
-          if (
-            username === "adminCoder@coder.com" &&
-            password === "adminCod3r123"
-          ) {
-            req.session.usuario = {
-              username: "adminCoder@coder.com"
-            };
-            res.redirect("/products");
+          if (username === admin.username && password === admin.password) {
+            // req.session.usuario = {
+            //   username: "adminCoder@coder.com"
+            // };
+            return done(null, admin);
           } else {
             let usuario = await usuariosModelo
               .findOne({ email: username })
@@ -103,7 +108,7 @@ export const inicializarPassport = () => {
               return done(null, false);
             }
 
-            if (!validaPassword(usuario, pass)) {
+            if (!validaPassword(usuario, password)) {
               //   return res.redirect(
               //     `/login?error=Se ingresaron Credenciales Incorrectas`
               //   );
@@ -114,6 +119,7 @@ export const inicializarPassport = () => {
             return done(null, usuario);
           }
         } catch (error) {
+          console.log(password);
           done(error, null);
         }
       }
@@ -122,11 +128,19 @@ export const inicializarPassport = () => {
 
   //   configurar serializador y deserializador
   passport.serializeUser((usuario, done) => {
-    return done(null, usuario._id);
+    if (usuario.id === 0) {
+      return done(null, admin.id);
+    } else {
+      return done(null, usuario._id);
+    }
   });
 
   passport.deserializeUser(async (id, done) => {
-    let usuario = await usuariosModelository.findById(id);
-    return done(null, usuario);
+    if (id === 0) {
+      done(null, admin);
+    } else {
+      let usuario = await usuariosModelo.findById(id);
+      return done(null, usuario);
+    }
   });
 };

@@ -5,8 +5,8 @@ import passport from "passport";
 // import crypto from "crypto";
 export const router = Router();
 
-router.get("/errorLogin", async (req, res) => {
-  return res.redirect("/registro?error=Error en el proceso de login...");
+router.get("/errorLogin", (req, res) => {
+  return res.redirect("/login?error=Error en el proceso de login...");
 });
 
 router.post(
@@ -43,11 +43,17 @@ router.post(
 
     console.log(req.user);
 
-    req.session.usuario = {
-      nombre: req.user.nombre,
-      apellido: req.user.apellido,
-      email: req.user.email
-    };
+    if (req.user.id === 0) {
+      req.session.usuario = {
+        email: req.user.username
+      };
+    } else {
+      req.session.usuario = {
+        nombre: req.user.nombre,
+        apellido: req.user.apellido,
+        email: req.user.email
+      };
+    }
 
     res.redirect("/products");
     // }
@@ -59,7 +65,7 @@ router.get("/errorRegistro", async (req, res) => {
 });
 
 router.post(
-  "/registrate",
+  "/registro",
   passport.authenticate("registro", {
     failureRedirect: "/api/sessions/errorRegistro"
   }),
@@ -100,6 +106,7 @@ router.post(
     // } catch (error) {
     //   res.redirect("/registro?error=Error inesperado. Reintente en unos minutos");
     // }
+
     res.redirect(`/login?mensaje=Usuario ${email} registrado correctamente`);
   }
 );
