@@ -112,6 +112,7 @@ router.post(
 );
 
 router.get("/logout", (req, res) => {
+  console.log(req.user);
   req.session.destroy((error) => {
     if (error) {
       res.redirect("/login?error=fallo en el logout");
@@ -119,4 +120,32 @@ router.get("/logout", (req, res) => {
   });
 
   res.redirect("/login");
+});
+
+router.get("/github", passport.authenticate("github", {}), (req, res) => {});
+
+router.get(
+  "/callbackGithub",
+  passport.authenticate("github", {
+    failureRedirect: "/api/sessions/errorGitHub"
+  }),
+  (req, res) => {
+    console.log(req.user);
+    req.session.usuario = req.user;
+
+    // res.setHeader("Content-Type", "application/json");
+    // res.status(200).json({
+    //   message: "Acceso OK...!!!",
+    //   usuario: req.user
+    // });
+
+    res.redirect("/products");
+  }
+);
+
+router.get("/errorGitHub", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.status(200).json({
+    error: "Error al autenticar con GitHub"
+  });
 });

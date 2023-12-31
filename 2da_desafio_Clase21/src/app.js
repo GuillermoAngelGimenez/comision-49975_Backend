@@ -20,6 +20,7 @@ import { messagesModelo } from "./dao/models/managerMessages.js";
 import { usuariosModelo } from "./dao/models/managerUsuarios.js";
 
 import { inicializarPassport } from "./config/config.passport.js";
+import { initPassport } from "./config/config.passport.git.js";
 import passport from "passport";
 
 const PORT = 8080;
@@ -43,6 +44,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static(path.join(__dirname, "/public")));
 inicializarPassport();
+initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 

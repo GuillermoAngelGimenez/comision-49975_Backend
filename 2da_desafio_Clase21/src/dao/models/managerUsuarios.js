@@ -11,6 +11,7 @@ const usuariosEsquema = new mongoose.Schema(
     password: String
   },
   {
+    strict: false,
     timestamps: {
       updatedAt: "FechaUltMod",
       createdAt: "FechaAlta"
