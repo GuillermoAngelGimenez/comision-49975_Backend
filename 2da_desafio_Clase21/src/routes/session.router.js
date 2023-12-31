@@ -111,8 +111,32 @@ router.post(
   }
 );
 
-router.get("/logout", (req, res) => {
-  console.log(req.user);
+router.get("/logout", async (req, res) => {
+  console.log("---------------");
+  // console.log(req.user);
+
+  let logueoGit = req.user;
+
+  try {
+    let nombre, email;
+    if (logueoGit.profile.provider === "github") {
+      nombre = logueoGit.nombre;
+      email = logueoGit.email;
+      console.log(nombre, email);
+    }
+
+    let usuario = await usuariosModelo.deleteOne({
+      nombre,
+      email
+    });
+
+    console.log(usuario);
+
+    // collection.deleteOne({ _id: documentoId });
+  } catch (error) {
+    console.log("Ocurrió un error inesperado en la base de datos");
+  }
+
   req.session.destroy((error) => {
     if (error) {
       res.redirect("/login?error=fallo en el logout");
