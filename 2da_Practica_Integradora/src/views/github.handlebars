@@ -1,0 +1,58 @@
+<br>
+{{#if login}}
+    {{!-- ------------ --}}
+{{else}}
+    <div class="row tituloHome">
+        <div class="col-10">
+            <h2>Login con GitHub</h2>
+        </div>
+        <div class="col-2 botonesHome">
+            <a class="btn btn-outline-secondary btn-sm w-60" href="/registrate" role="button">Registrate</a>
+            <br>
+            <a class="btn btn-outline-secondary btn-sm w-60" href="/api/sessions/github" role="button">Acceder con GitHub</a>
+        </div>
+    </div>
+{{/if}}
+
+<br>
+<div class="container login">
+  <div class="row">
+    <div class="col-md-12 login-form">
+        <h4>Pantalla de Login de Usuario</h4>
+        <form action="/api/sessions/login" method="post">
+
+        {{#if error}}
+            <div style="color: red;">{{error}}</div>
+        {{/if}}
+
+        {{#if mensaje}}
+            <div style="color: green;">{{mensaje}}</div>
+        {{/if}}
+
+        <br>
+        
+        <div class="col-md-12 mb-4">
+            <label for="emailReg" class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" id="emailReg" >
+            {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+        </div>
+        <div class="col-md-12 mb-4">
+            <label for="passReg" class="form-label">Password</label>
+            <input type="password" name="pass" class="form-control" id="passReg">
+        </div>
+        <div class="botonLogin">
+            <button type="submit" class="btn btn-primary w-50" value="Registrar">Ingresar</button>
+        </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+{{!-- {{#if login}}
+    <div class="botones-principal">
+        <a class="btn btn-primary" href="/" role="button">Volver</a>
+    </div>
+{{/if}} --}}
+

@@ -1,0 +1,175 @@
+[
+     {
+          "id": 1,
+          "title": "Moto E20",
+          "description": "Cámara trasera 13 mpx con flash LED | Dual | Zoom digital 4x, Display 6.52'' HD+, Procesador Octa Core 1.6 GHz",
+          "price": 78299,
+          "thumbnail": "Sin imagen",
+          "code": "AB70009363",
+          "stock": 25
+     },
+     {
+          "id": 2,
+          "title": "Samsung Galaxy A04 64GB",
+          "description": "Cámara trasera 50 mpx con Flash LED | Dual | Zoom digital 10x, Display 6.5'' HD+, Procesador Octa Core 2.3GHz,1.8GHz ",
+          "price": 129999,
+          "thumbnail": "Sin imagen",
+          "code": "AB70010723",
+          "stock": 18
+     },
+     {
+          "id": 3,
+          "title": "Daewoo TWS Nova Auriculares Bluetooth",
+          "description": "Modelo Nova, Manos Libres, In Ear, Compatibilidad Android / iOS",
+          "price": 10499,
+          "thumbnail": "Sin imagen",
+          "code": "AB7005669",
+          "stock": 40
+     },
+     {
+          "id": 4,
+          "title": "Moto E13 64GB",
+          "description": "Cámara trasera 13 mpx con flash LED | Zoom digital 4x, Display 6.5'' HD+ IPS, Procesador Octa Core 1.6 GHz",
+          "price": 82799,
+          "thumbnail": "Sin imagen",
+          "code": "AB70011400",
+          "stock": 8
+     },
+     {
+          "id": 5,
+          "title": "SanDisk ultra memoria",
+          "description": "Rendimiento de Hasta 100 MBs de velocidad de lectura, Almacenamiento 32 GB, Dimensiones 14,99 x 10,92 x 1,02 mm",
+          "price": 3679,
+          "thumbnail": "Sin imagen",
+          "code": "AB7001534",
+          "stock": 38
+     },
+     {
+          "id": 7,
+          "title": "Huawei Band 7",
+          "description": "Resistencia al agua IP67, Pantalla 44.35 x 26 x 9.99 mm, Batería 336 hs",
+          "price": 39.999,
+          "thumbnail": "Sin imagen",
+          "code": "AB7004561",
+          "stock": 15
+     },
+     {
+          "id": 8,
+          "title": "Samsung Galaxy Z Flip5 5G 256GB",
+          "description": "Cámara trasera 12 mpx con Flash LED | Dual | Zoom digital 10x | Zoom optico 2x, Display 6.7'' FHD+ Super Amoled, Procesador Octa Core 3.36GHz,2.8GHz,2GHz",
+          "price": 799999,
+          "thumbnail": "Sin imagen",
+          "code": "AB70011637",
+          "stock": 9
+     },
+     {
+          "id": 9,
+          "title": "Maxell Soporte para Escritorio",
+          "description": "Modelo 3POD, Compatibilidad Universal, Tipo de agarre Mecánico, Rotación 360°",
+          "price": 11999,
+          "thumbnail": "Sin imagen",
+          "code": "AB7005836",
+          "stock": 48
+     },
+     {
+          "id": 11,
+          "title": "Dekkin Parlante 012 Bluetooth",
+          "description": "Resistencia al agua IPX5, Batería de 4 a 6 hs, Dimensiones 62 x 95 mm",
+          "price": 13599,
+          "thumbnail": "Sin imagen",
+          "code": "AB7005697",
+          "stock": 61
+     },
+     {
+          "id": 13,
+          "title": "auriculares SONY",
+          "description": "modelo SSS",
+          "code": "ABC",
+          "price": "80000",
+          "status": "true",
+          "stock": 30,
+          "category": "accesorios",
+          "thumbnails": []
+     },
+     {
+          "id": 14,
+          "title": "teclado genius",
+          "description": "modelo AAA",
+          "code": "ZZZ",
+          "price": "75000",
+          "status": "true",
+          "stock": 17,
+          "category": "accesorios",
+          "thumbnails": []
+     },
+     {
+          "id": 15,
+          "title": "monitor samsung",
+          "description": "samsung 21 pulg.",
+          "code": "ABC134",
+          "price": 150000,
+          "status": true,
+          "stock": 7,
+          "category": "dispositivos"
+     },
+     {
+          "id": 16,
+          "title": "Parlante",
+          "description": "Sony",
+          "code": "ABC135",
+          "price": 50000,
+          "status": true,
+          "stock": 7,
+          "category": "dispositivos"
+     },
+     {
+          "id": 17,
+          "title": "PS5",
+          "description": "Sony",
+          "code": "ABC136",
+          "price": 650000,
+          "status": true,
+          "stock": 13,
+          "category": "juegos"
+     },
+     {
+          "id": 18,
+          "title": "Torre de Sonido",
+          "description": "LG",
+          "code": "GGGXBOOM",
+          "price": 350000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 19,
+          "title": "Torre de Sonido 2",
+          "description": "LG",
+          "code": "GGXBOOM2",
+          "price": 370000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 25,
+          "title": "teclado inalambrico SD",
+          "description": "Genius",
+          "code": "GEN000",
+          "price": 19000,
+          "status": true,
+          "stock": 4,
+          "category": "musica"
+     },
+     {
+          "id": 30,
+          "title": "NOTEBOOK AIWA",
+          "description": "CLOUDBOOK CA141-C INTEL N4020 4GB 128GB 14 W11 C/FUNDA",
+          "code": "CA141-C",
+          "price": 263999,
+          "status": true,
+          "stock": 3,
+          "category": "notebooks"
+     }
+]

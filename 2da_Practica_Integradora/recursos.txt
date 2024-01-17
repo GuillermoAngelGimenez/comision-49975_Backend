@@ -1,0 +1,4 @@
+App ID: 761470
+Client ID: Iv1.38bd9ed162be36e1
+Client Secret: c301e75df7203dee2697f43aaf853624deaf6f3f
+http://localhost:8080/api/session/callbackGithub
