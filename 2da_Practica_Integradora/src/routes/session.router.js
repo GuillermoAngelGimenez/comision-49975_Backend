@@ -1,9 +1,6 @@
 import { Router } from "express";
-import { usuariosModelo } from "../dao/models/managerUsuarios.js";
-import { creaHash, validaPassword } from "../util.js";
 import { MiRouter } from "./router.js";
-import passport from "passport";
-import { passportCall } from "../util.js";
+import { passportCall, generaToken } from "../util.js";
 export const router = Router();
 
 // router.get("/errorLogin", (req, res) => {
@@ -110,15 +107,12 @@ export class SessionsRouter extends MiRouter {
       return res.successAlta("Registro correcto...!!!", req.user);
     });
 
-    // this.post("/login", ["PUBLIC"], passportCall("login"), (req, res) => {
-    //   let token = generaToken(req.user);
-    //   res.cookie("coderCookie", token, {
-    //     httpOnly: true,
-    //     maxAge: 1000 * 60 * 60
-    //   });
-    //   return res.success(
-    //     `Login correcto para el usuario ${req.user.nombre}, con rol: ${req.user.rol}`
-    //   );
-    // });
+    this.post("/login", ["PUBLIC"], passportCall("login"), (req, res) => {
+      let token = generaToken(req.user);
+      res.cookie("ecommerce-Cookie", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
+      return res.success(
+        `Login correcto para el usuario:${req.user.nombre}, con rol:${req.user.rol}`
+      );
+    });
   }
 }

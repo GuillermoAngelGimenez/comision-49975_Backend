@@ -1,8 +1,9 @@
 import passport from "passport";
 import local from "passport-local";
+import passportJWT from "passport-jwt";
 import { usuariosModelo } from "../dao/models/managerUsuarios.js";
-import { creaHash, validaPassword } from "../util.js";
-// import { passportJWT } from "passport-jwt";
+import { creaHash, validaPassword, SECRET } from "../util.js";
+
 
 // export const inicializarPassport = () => {
 //   const admin = {
@@ -123,61 +124,54 @@ import { creaHash, validaPassword } from "../util.js";
 //   });
 // };
 
-// verificar
-// const buscarToken = (req) => {
-//   let token = null;
+const buscarToken = (req) => {
+  let token = null;
 
-//   if (req.cookies.coderCookie) {
-//     token = req.cookies.coderCookie;
-//   }
+  if (req.cookies.ecommerce-Cookie) {
+    token = req.cookies.ecommerce-Cookie;
+  }
 
-//   return token;
-// };
+  return token;
+};
 
 export const inicializarPassport = () => {
-  // passport.use(
-  //   "jwt",
-  //   new passportJWT.Strategy(
-  //     {
-  //       secretOrKey: SECRET,
-  //       jwtFromRequest: passportJWT.ExtractJwt.fromExtractors([buscarToken])
-  //     },
-  //     async (contenidoToken, done) => {
-  //       try {
-  //         return done(null, contenidoToken);
-  //       } catch (error) {
-  //         return done(error);
-  //       }
-  //     }
-  //   )
-  // );
+  passport.use("jwt", new passportJWT.Strategy(
+      {
+        secretOrKey: SECRET,
+        jwtFromRequest: passportJWT.ExtractJwt.fromExtractors([buscarToken])
+      },
+      async (contenidoToken, done) => {
+        try {
+          return done(null, contenidoToken);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
 
-  // passport.use(
-  //   "login",
-  //   new local.Strategy(
-  //     {
-  //       usernameField: "email"
-  //     },
-  //     async (username, password, done) => {
-  //       try {
-  //         let usuario = await usuariosModelo
-  //           .findOne({ email: username })
-  //           .lean();
-  //         if (!usuario) {
-  //           return done(null, false, { message: `Credenciales incorrectas` });
-  //         }
-  //         if (!validaPassword(usuario, password)) {
-  //           return done(null, false, { message: `Credenciales incorrectas` });
-  //         }
+  passport.use("login", new local.Strategy(
+      {
+        usernameField: "email"
+      },
+      async (username, password, done) => {
+        try {
+          let usuario = await usuariosModelo.findOne({ email: username }).lean();
+          if (!usuario) {
+            return done(null, false, { message: `Se ingresaron credenciales incorrectas` });
+          }
+          if (!validaPassword(usuario, password)) {
+            return done(null, false, { message: `Se ingresaron credenciales incorrectas` });
+          }
 
-  //         delete usuario.password;
-  //         return done(null, usuario);
-  //       } catch (error) {
-  //         return done(error);
-  //       }
-  //     }
-  //   )
-  // );
+          delete usuario.password;
+          return done(null, usuario);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
 
   passport.use("registro", new local.Strategy(
       {

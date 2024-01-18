@@ -24,6 +24,8 @@ import { inicializarPassport } from "./config/config.passport.js"  ;
 import { initPassport } from "./config/config.passport.git.js";
 import passport from "passport";
 
+import cookieParser from "cookie-parser";
+
 const PORT = 8080;
 const app = express();
 
@@ -32,9 +34,7 @@ app.use(
     secret: "codercoder123",
     resave: true,
     saveUninitialized: true,
-    store: mongoStore.create({
-      mongoUrl:
-        "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority",
+    store: mongoStore.create({mongoUrl: "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority",
       mongoOptions: { dbName: "ecommerce" },
       ttl: 3600
     })
@@ -44,6 +44,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static(path.join(__dirname, "/public")));
+app.use(cookieParser());
 inicializarPassport();
 initPassport();
 app.use(passport.initialize());

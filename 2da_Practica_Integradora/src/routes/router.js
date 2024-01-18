@@ -27,7 +27,7 @@ export class MiRouter{
         res.errorCliente=(error)=>res.status(400).json({status:"Bad Request", error})
         res.errorServer=(error)=>res.status(500).json({status:"Server Error", error})
         res.errorAuth=(error)=>res.status(401).json({status:"Auth Error", error})
-        res.errorPermidos=(error)=>res.status(403).json({status:"Permisos incorrectos", error})
+        res.errorPermisos=(error)=>res.status(403).json({status:"Permisos incorrectos", error})
         next()
     }
 
@@ -58,7 +58,7 @@ export class MiRouter{
             }
 
             if(!permisos.includes(req.user.rol.toLowerCase())){
-                return res.errorPermidos("No tiene privilegios suficientes para acceder a este recurso... :(")
+                return res.errorPermisos("No tiene privilegios suficientes para acceder a este recurso!!!")
             }
 
             return next()
