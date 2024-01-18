@@ -2,19 +2,19 @@ import mongoose from "mongoose";
 
 const usuariosEsquema = new mongoose.Schema(
   {
-    first_name: String,
-    last_name: String,
+    nombre: String,
+    apellido: String,
     email: {
       type: String,
       unique: true
     },
     password: String,
-    age: Number,
+    edad: Number,
     cart: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "carts"
     },
-    role: {
+    rol: {
       type: String,
       default: "user"
     }

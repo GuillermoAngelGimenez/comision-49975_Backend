@@ -7,7 +7,10 @@ import sessions from "express-session";
 import mongoStore from "connect-mongo";
 
 import { router as productosRouterVista } from "./routes/productosRouterVista.js";
-import { router as sessionRouter } from "./routes/session.router.js";
+
+// import { router as sessionRouter } from "./routes/session.router.js";
+import { SessionsRouter } from "./routes/session.router.js";
+
 import routerProductos from "./routes/products.router.js";
 import routerCarts from "./routes/carts.router.js";
 import { Server } from "socket.io";
@@ -17,9 +20,7 @@ import mongoose from "mongoose";
 
 import { messagesModelo } from "./dao/models/managerMessages.js";
 
-import { usuariosModelo } from "./dao/models/managerUsuarios.js";
-
-import { inicializarPassport } from "./config/config.passport.js";
+import { inicializarPassport } from "./config/config.passport.js"  ;
 import { initPassport } from "./config/config.passport.git.js";
 import passport from "passport";
 
@@ -54,9 +55,10 @@ app.set("views", path.join(__dirname, "/views"));
 
 app.use("/api/products", httpSocket, routerProductos);
 app.use("/api/carts", routerCarts);
-app.use("/", productosRouterVista);
+app.use("/", productosRouterVista);  
 
-app.use("/api/sessions", sessionRouter);
+const sessionsRouter = new SessionsRouter();
+app.use("/api/sessions", sessionsRouter.getRouter());
 
 const serverHTTP = app.listen(PORT, () => {
   console.log(`Server escuchando en puerto ${PORT}`);
