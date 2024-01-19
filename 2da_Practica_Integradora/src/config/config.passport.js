@@ -2,6 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import passportJWT from "passport-jwt";
 import { usuariosModelo } from "../dao/models/managerUsuarios.js";
+import { cartsModelo } from "../dao/models/managerCarts.js";
 import { creaHash, validaPassword, SECRET } from "../util.js";
 
 
@@ -180,10 +181,10 @@ export const inicializarPassport = () => {
       },
       async (req, username, password, done) => {
         try {
-          let { nombre, apellido, email, edad, rol } = req.body;
-          if (!nombre || !apellido || !email || !edad ) {
+          let { nombre, apellido, email, edad, rol, cart } = req.body;
+          if (!nombre || !apellido || !email || !edad || !cart) {
             return done(null, false, {
-              message: "Complete nombre, apellido, edad, email, y password"
+              message: "Complete nombre, apellido, edad, email, password y cart"
             });
           }
 
@@ -194,13 +195,29 @@ export const inicializarPassport = () => {
             });
           }
 
+          // let existeCarrito = await cartsModelo.findOne({  _id: cart }).lean();
+          // let existeCarrito = await cartsModelo.findOne().lean();
+          // if (!existeCarrito) {
+          //   return done(null, false, {
+          //     message: `No existe el carrito con id ${cart}`
+          //   });
+          // }
+
+          let existeCarrito;
+          try {
+            existeCarrito = await cartsModelo.findOne({ _id: cart }).lean();
+          } catch (error) {
+            return done(null, false, {message: `No existe el carrito con id: ${cart}`});
+          }
+
           let nuevoUsuario = await usuariosModelo.create({
             nombre,
             apellido,
             edad,
             rol,
             email,
-            password: creaHash(password)
+            password: creaHash(password),
+            cart
           });
 
           return done(null, nuevoUsuario);

@@ -59,6 +59,7 @@ app.use("/api/carts", routerCarts);
 app.use("/", productosRouterVista);  
 
 const sessionsRouter = new SessionsRouter();
+// app.use("/api/sessions", sessionRouter);
 app.use("/api/sessions", sessionsRouter.getRouter());
 
 const serverHTTP = app.listen(PORT, () => {
