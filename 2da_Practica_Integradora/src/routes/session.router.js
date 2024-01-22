@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { MiRouter } from "./router.js";
-import { passportCall, generaToken } from "../util.js";
+import { passportCall, generaToken, verificarToken } from "../util.js";
 export const router = Router();
 
 // router.get("/errorLogin", (req, res) => {
@@ -109,12 +109,18 @@ export class SessionsRouter extends MiRouter {
 
     this.post("/login", ["PUBLIC"], passportCall("login"), (req, res) => {
       let token = generaToken(req.user);
-      res.cookie("ecommerce-Cookie", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
+      res.cookie("ecommerce", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
       return res.success(
         `Login correcto para el usuario:${req.user.nombre}, con rol:${req.user.rol}`
       );
     });
 
+    this.get("/products", (req, res) => {
+      console.log(req);
+      const usuario = verificarToken(req.cookies.ecommerce);
+
+      res.success(usuario);
+    });
 
     this.getC("/current", passportCall("current"), (req, res) => {
       // let token = generaToken(req.user);

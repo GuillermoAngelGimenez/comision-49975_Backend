@@ -28,3 +28,5 @@ export const passportCall=(estrategia)=>{
 }
 
 export const generaToken=(usuario)=>jwt.sign({...usuario}, SECRET, {expiresIn: "1h"}) 
+
+export const verificarToken=(token)=>{return jwt.verify(token, SECRET)}
