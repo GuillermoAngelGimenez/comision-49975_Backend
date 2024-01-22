@@ -135,6 +135,11 @@ const buscarToken = (req) => {
   return token;
 };
 
+const opts = {
+  jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: SECRET
+};
+
 export const inicializarPassport = () => {
   passport.use("jwt", new passportJWT.Strategy(
       {
@@ -150,6 +155,15 @@ export const inicializarPassport = () => {
       }
     )
   );
+
+  passport.use('current', new passportJWT.Strategy(opts, (jwt_payload, done) => {
+    const user = { id: jwt_payload.sub, username: jwt_payload.username };
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  }));
 
   passport.use("login", new local.Strategy(
       {
@@ -194,14 +208,6 @@ export const inicializarPassport = () => {
               message: `Ya existe el usuario con email ${email}`
             });
           }
-
-          // let existeCarrito = await cartsModelo.findOne({  _id: cart }).lean();
-          // let existeCarrito = await cartsModelo.findOne().lean();
-          // if (!existeCarrito) {
-          //   return done(null, false, {
-          //     message: `No existe el carrito con id ${cart}`
-          //   });
-          // }
 
           let existeCarrito;
           try {

@@ -114,5 +114,19 @@ export class SessionsRouter extends MiRouter {
         `Login correcto para el usuario:${req.user.nombre}, con rol:${req.user.rol}`
       );
     });
+
+
+    this.getC("/current", passportCall("current"), (req, res) => {
+      // let token = generaToken(req.user);
+      // res.cookie("ecommerce-Cookie", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
+      // return res.success(
+      //   `Login correcto para el usuario:${req.user.nombre}, con rol:${req.user.rol}`
+      // );
+
+      // return res.successAlta("El usuario consultado es el siguiente..", req);
+
+      res.json({ user: req.user });
+    });
+
   }
 }
