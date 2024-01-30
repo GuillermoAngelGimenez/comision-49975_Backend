@@ -89,16 +89,16 @@ export const inicializarPassport = () => {
       },
       async (req, username, password, done) => {
         try {
-          let { nombre, apellido, email, edad, rol, cart } = req.body;
+          let { first_name, last_name, email, age, role, cart } = req.body;
 
-          if (!nombre || !apellido || !email || !edad || !cart || !password) {
+          if (!first_name || !last_name || !email || !age || !cart || !password) {
             return done(null, false, {
-              message: "Complete nombre, apellido, edad, email, password y cart"
+              message: "Complete first_name, last_name, age, email, password y cart"
             });
           }
 
           // de la versión anterior del endpoint de registro -----------------------    
-          if (!nombre || !apellido || !email || !password || !edad || !cart) {
+          if (!first_name || !last_name || !email || !password || !age || !cart) {
             return res.redirect("/registrate?error=Complete todos los campos");
             // return done(null, false);
           }
@@ -126,14 +126,14 @@ export const inicializarPassport = () => {
             return done(null, false, {message: `No existe el carrito con id: ${cart}`});
           }
 
-          if(rol.length == 0)
-            rol ="user";
+          if(role.length == 0)
+            role ="user";
 
           let nuevoUsuario = await usuariosModelo.create({
-            nombre,
-            apellido,
-            edad,
-            rol,
+            first_name,
+            last_name,
+            age,
+            role,
             email,
             password: creaHash(password),
             cart
@@ -161,7 +161,7 @@ export const inicializarPassport = () => {
         
         if (!usuario) {
           let nuevoUsuario = {
-            nombre: profile._json.name,
+            first_name: profile._json.name,
             email: profile._json.email,
             profile
           };
