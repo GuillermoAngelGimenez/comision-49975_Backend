@@ -3,28 +3,26 @@ import __dirname from "./util.js";
 import path from "path";
 import { engine } from "express-handlebars";
 
-import sessions from "express-session";
-import mongoStore from "connect-mongo";
-
+import routerProductos from "./routes/products.router.js";
+import routerCarts from "./routes/carts.router.js";
 import { router as productosRouterVista } from "./routes/productosRouterVista.js";
+
+import sessions from "express-session";
+import mongoose from "mongoose";
+import mongoStore from "connect-mongo";
+import passport from "passport";
+import cookieParser from "cookie-parser";
 
 // import { router as sessionRouter } from "./routes/session.router.js";
 import { SessionsRouter } from "./routes/session.router.js";
 
-import routerProductos from "./routes/products.router.js";
-import routerCarts from "./routes/carts.router.js";
+import { inicializarPassport } from "./config/config.passport.js"  ;
+// import { initPassport } from "./config/config.passport.git.js";
+          
 import { Server } from "socket.io";
 import { httpSocket } from "./middleware/socket.js";
 
-import mongoose from "mongoose";
-
 import { messagesModelo } from "./dao/models/managerMessages.js";
-
-import { inicializarPassport } from "./config/config.passport.js"  ;
-import { initPassport } from "./config/config.passport.git.js";
-import passport from "passport";
-
-import cookieParser from "cookie-parser";
 
 const PORT = 8080;
 const app = express();
@@ -46,7 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/public", express.static(path.join(__dirname, "/public")));
 app.use(cookieParser());
 inicializarPassport();
-initPassport();
+// initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -102,8 +100,7 @@ io.on("connection", (socket) => {
 
 try {
   await mongoose.connect(
-    "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority",
-    { dbName: "ecommerce" }
+    "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority", { dbName: "ecommerce" }
   );
 
   console.log("DB Online...!!!");

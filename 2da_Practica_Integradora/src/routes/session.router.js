@@ -1,96 +1,19 @@
 import { Router } from "express";
-import { MiRouter } from "./router.js";
+
 import { passportCall, generaToken, verificarToken } from "../util.js";
-export const router = Router();
 
-// router.get("/errorLogin", (req, res) => {
-//   return res.redirect("/login?error=Error en el proceso de login...");
-// });
+import passport from "passport";
 
-// router.post(
-//   "/login",
-//   passport.authenticate("login", {
-//     failureRedirect: "/api/sessions/errorLogin"
-//   }),
-//   async (req, res) => {
-//     console.log(req.user);
-
-//     if (req.user.id === 0) {
-//       req.session.usuario = {
-//         email: req.user.username
-//       };
-//     } else {
-//       req.session.usuario = {
-//         nombre: req.user.nombre,
-//         apellido: req.user.apellido,
-//         email: req.user.email
-//       };
-//     }
-
-//     res.redirect("/products");
-//   }
-// );
+import { MiRouter } from "./router.js";
 
 // router.get("/errorRegistro", async (req, res) => {
 //   return res.redirect("/registro?error=Error en el proceso de registro");
 // });
 
-// router.post(
-//   "/registro",
-//   passport.authenticate("registro", {
-//     failureRedirect: "/api/sessions/errorRegistro"
-//   }),
+// router.post("/registro", passport.authenticate("registro", {failureRedirect: "/api/sessions/errorRegistro"}),
 //   async (req, res) => {
 //     let { email } = req.body;
-
 //     res.redirect(`/login?mensaje=Usuario ${email} registrado correctamente`);
-//   }
-// );
-
-// router.get("/logout", async (req, res) => {
-//   console.log("---------------");
-
-//   let logueoGit = req.user;
-
-//   try {
-//     let nombre, email;
-//     if (logueoGit.profile.provider === "github") {
-//       nombre = logueoGit.nombre;
-//       email = logueoGit.email;
-//       console.log(nombre, email);
-//     }
-
-//     let usuario = await usuariosModelo.deleteOne({
-//       nombre,
-//       email
-//     });
-
-//     console.log(usuario);
-//   } catch (error) {
-//     console.log("Ocurrió un error inesperado en la base de datos");
-//   }
-
-//   req.session.destroy((error) => {
-//     if (error) {
-//       res.redirect("/login?error=fallo en el logout");
-//     }
-//   });
-
-//   res.redirect("/login");
-// });
-
-// router.get("/github", passport.authenticate("github", {}), (req, res) => {});
-
-// router.get(
-//   "/callbackGithub",
-//   passport.authenticate("github", {
-//     failureRedirect: "/api/sessions/errorGitHub"
-//   }),
-//   (req, res) => {
-//     console.log(req.user);
-//     req.session.usuario = req.user;
-
-//     res.redirect("/products");
 //   }
 // );
 
@@ -104,35 +27,60 @@ export const router = Router();
 export class SessionsRouter extends MiRouter {
   init() {
     this.post("/registro", ["PUBLIC"], passportCall("registro"), (req, res) => { 
-      return res.successAlta("Registro correcto...!!!", req.user);
+      if (req.headers['content-type'] === 'application/json') {
+        return res.successAlta("Registro correcto...!!!", req.user);
+      } else{
+        res.redirect("/login");
+      }
     });
+
 
     this.post("/login", ["PUBLIC"], passportCall("login"), (req, res) => {
       let token = generaToken(req.user);
+
       res.cookie("ecommerce", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
-      return res.success(
-        `Login correcto para el usuario:${req.user.nombre}, con rol:${req.user.rol}`
-      );
+
+      // console.log(req.headers);
+      
+      if (req.headers['content-type'] === 'application/json') {
+        // console.log("hola en la API")
+        res.success(`Login correcto para el usuario:${req.user.nombre}, con rol:${req.user.rol}`); 
+      } else {
+        // console.log("hola en la interfaz")
+        res.redirect("/products");
+      }
+
     });
 
-    this.get("/products", (req, res) => {
+    this.get("/current", ["PUBLIC"], (req, res) => {
       console.log(req);
       const usuario = verificarToken(req.cookies.ecommerce);
-
+      // console.log(usuario);
       res.success(usuario);
+      });
+
+    this.get("/logout", ["PUBLIC"], (req, res) => {
+      res.clearCookie("ecommerce");
+      res.redirect("/login");
     });
 
-    this.getC("/current", passportCall("current"), (req, res) => {
-      // let token = generaToken(req.user);
-      // res.cookie("ecommerce-Cookie", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
-      // return res.success(
-      //   `Login correcto para el usuario:${req.user.nombre}, con rol:${req.user.rol}`
-      // );
-
-      // return res.successAlta("El usuario consultado es el siguiente..", req);
-
-      res.json({ user: req.user });
+    this.get("/github", ["PUBLIC"], passportCall("github"), (req, res) => {
+          
     });
+    
+    this.get("/callbackGithub", ["PUBLIC"], (req, res) => {
+        const token = generaToken(req.user)
+        res.cookie("ecommerce", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
+
+        // const usuario = verificarToken(req.cookies.ecommerce);
+        // res.success(usuario);
+        // console.log(usuario);
+
+        res.redirect("/products");
+      }
+    );
+
+    
 
   }
 }

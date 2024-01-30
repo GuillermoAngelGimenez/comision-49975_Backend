@@ -13,14 +13,10 @@ export class MiRouter{
         return this.router
     }
 
-    getC(ruta, ...funciones){ // ... son aquí el operador rest, que alamacena los argumentos que lleguen en un array llamado funciones
-        this.router.get(ruta, passportCall("current"))
-        // this.router.get(ruta, this.misRespuestas, (ruta=="/current")?passportCall("current"):passportCall("jwt"), this.acceso(permisos), this.agregaTryCatch(funciones))
-    }
-
     get(ruta, permisos, ...funciones){ // ... son aquí el operador rest, que alamacena los argumentos que lleguen en un array llamado funciones
-        this.router.get(ruta, this.misRespuestas, passportCall("jwt"), this.acceso(permisos), this.agregaTryCatch(funciones))
-        // this.router.get(ruta, this.misRespuestas, (ruta=="/current")?passportCall("current"):passportCall("jwt"), this.acceso(permisos), this.agregaTryCatch(funciones))
+        // this.router.get(ruta, this.misRespuestas, passportCall("jwt"), this.acceso(permisos), this.agregaTryCatch(funciones))
+        // this.router.get(ruta, this.misRespuestas, (ruta!=="/api/sessions/current")?passportCall("jwt"):(req,res,next)=>{next()}, this.acceso(permisos), this.agregaTryCatch(funciones))
+        this.router.get(ruta, this.misRespuestas, this.acceso(permisos), this.agregaTryCatch(funciones))
     }
 
     post(ruta, permisos, ...funciones){ // ... son aquí el operador rest, que alamacena los argumentos que lleguen en un array llamado funciones

@@ -15,9 +15,7 @@ export const initPassport = () => {
       async (accessToken, refreshToken, profile, done) => {
         try {
           // console.log(profile);
-          let usuario = await usuariosModelo.findOne({
-            username: profile._json.email
-          });
+          let usuario = await usuariosModelo.findOne({username: profile._json.email});
 
           if (!usuario) {
             let nuevoUsuario = {
@@ -30,6 +28,7 @@ export const initPassport = () => {
           }
 
           return done(null, usuario);
+
         } catch (error) {
           return done(error);
         }

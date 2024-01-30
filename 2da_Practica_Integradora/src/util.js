@@ -1,7 +1,7 @@
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import bcrypt from "bcrypt";
 import passport from "passport";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,3 +30,5 @@ export const passportCall=(estrategia)=>{
 export const generaToken=(usuario)=>jwt.sign({...usuario}, SECRET, {expiresIn: "1h"}) 
 
 export const verificarToken=(token)=>{return jwt.verify(token, SECRET)}
+
+

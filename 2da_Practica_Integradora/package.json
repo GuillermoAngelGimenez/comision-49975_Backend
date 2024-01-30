@@ -19,7 +19,7 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
     "mongoos": "^0.0.1-security",
-    "mongoose": "^8.1.0",
+    "mongoose": "^8.1.1",
     "mongoose-paginate-v2": "^1.7.4",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
