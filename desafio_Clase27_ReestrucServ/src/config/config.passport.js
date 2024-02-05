@@ -1,14 +1,15 @@
 import passport from "passport";
 import local from "passport-local";
 import passportJWT from "passport-jwt";
-import { usuariosModelo } from "../dao/models/managerUsuarios.js";
-import { cartsModelo } from "../dao/models/managerCarts.js";
+import { usuariosService } from "../services/usuarios.service.js";
+import { cartsService } from "../services/carts.service.js";
 import { creaHash, validaPassword, SECRET, verificarToken } from "../util.js";
 import { MiRouter } from "../routes/router.js";
-
+import { config } from "./config.js";
 
 // ---agregado para github
 import github from "passport-github2";
+
 
 
 const buscarToken = (req) => {
@@ -24,15 +25,9 @@ const buscarToken = (req) => {
 
 export const inicializarPassport = () => {
 
-  // const admin = {
-  //   id: 0,
-  //   username: "adminCoder@coder.com",
-  //   password: "adminCod3r123"
-  // };
-
   passport.use("jwt", new passportJWT.Strategy(
       {
-        secretOrKey: SECRET,
+        secretOrKey: config.SECRETKEY,
         jwtFromRequest: passportJWT.ExtractJwt.fromExtractors([buscarToken])
       },
       async (contenidoToken, done) => {
@@ -57,11 +52,8 @@ export const inicializarPassport = () => {
             return done(null, false);
           }
 
-          // if (username === admin.username && password === admin.password) {
-          //   return done(null, admin);
-          // } else {
-
-            let usuario = await usuariosModelo.findOne({ email: username }).lean();
+            // let usuario = await usuariosModelo.findOne({ email: username }).lean();
+            let usuario = await usuariosService.getUsuarioByEmail(username);
             if (!usuario) {
               return done(null, false, { message: `Se ingresaron credenciales incorrectas` });
             }
@@ -69,11 +61,8 @@ export const inicializarPassport = () => {
               return done(null, false, { message: `Se ingresaron credenciales incorrectas` });
             }
 
-            // console.log(req.body);
-
             delete usuario.password;
             return done(null, usuario);
-          // }
 
         } catch (error) {
           return done(error);
@@ -89,18 +78,16 @@ export const inicializarPassport = () => {
       },
       async (req, username, password, done) => {
         try {
-          let { nombre, apellido, email, edad, rol, cart } = req.body;
+          let { first_name, last_name, email, age, role, cart } = req.body;
 
-          if (!nombre || !apellido || !email || !edad || !cart || !password) {
+          if (!first_name || !last_name || !email || !age || !cart || !password) {
             return done(null, false, {
-              message: "Complete nombre, apellido, edad, email, password y cart"
+              message: "Complete first_name, last_name, age, email, password y cart"
             });
           }
 
-          // de la versión anterior del endpoint de registro -----------------------    
-          if (!nombre || !apellido || !email || !password || !edad || !cart) {
+          if (!first_name || !last_name || !email || !password || !age || !cart) {
             return res.redirect("/registrate?error=Complete todos los campos");
-            // return done(null, false);
           }
 
           // se valida en formulario
@@ -112,7 +99,8 @@ export const inicializarPassport = () => {
           }
           // -----------------------
 
-          let existe = await usuariosModelo.findOne({ email }).lean();
+          // let existe = await usuariosModelo.findOne({ email }).lean();
+          let existe = await usuariosService.getUsuarioByEmail(email);
           if (existe) {
             return done(null, false, {
               message: `Ya existe el usuario con email ${email}`
@@ -121,19 +109,21 @@ export const inicializarPassport = () => {
 
           let existeCarrito;
           try {
-            existeCarrito = await cartsModelo.findOne({ _id: cart }).lean();
+            // existeCarrito = await cartsModelo.findOne({ _id: cart }).lean();
+            existeCarrito = await cartsService.getCartById(cart).lean();
           } catch (error) {
             return done(null, false, {message: `No existe el carrito con id: ${cart}`});
           }
 
-          if(rol.length == 0)
-            rol ="user";
+          if(role.length == 0)
+            role ="user";
 
-          let nuevoUsuario = await usuariosModelo.create({
-            nombre,
-            apellido,
-            edad,
-            rol,
+          // let nuevoUsuario = await usuariosModelo.create({
+          let nuevoUsuario = await usuariosService.createUsuario({
+            first_name,
+            last_name,
+            age,
+            role,
             email,
             password: creaHash(password),
             cart
@@ -157,16 +147,18 @@ export const inicializarPassport = () => {
     async (accessToken, refreshToken, profile, done) => {
       try {
         console.log(profile);
-        let usuario = await usuariosModelo.findOne({username: profile._json.email});
+        // let usuario = await usuariosModelo.findOne({username: profile._json.email});
+        let usuario = await usuariosService.getUsuarioByEmail(profile._json.email); ;
         
         if (!usuario) {
           let nuevoUsuario = {
-            nombre: profile._json.name,
+            first_name: profile._json.name,
             email: profile._json.email,
             profile
           };
 
-          usuario = await usuariosModelo.create(nuevoUsuario);
+          // usuario = await usuariosModelo.create(nuevoUsuario);
+          usuario = await usuariosService.createUsuario(nuevoUsuario);
         }
 
         return done(null, usuario);

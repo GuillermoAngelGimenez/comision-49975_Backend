@@ -2,18 +2,11 @@ import { Router } from "express";
 import { productsModelo } from "../dao/models/managerProducts.js";
 import { cartsModelo } from "../dao/models/managerCarts.js";
 import mongoose from "mongoose";
+// import { UsuariosController } from "../controller/usuarios.controller.js";
 
 import { verificarToken } from "../util.js";
 
 export const router = Router();
-
-// const auth = (req, res, next) => {
-//   if (!req.session.usuario) {
-//     return res.redirect("/login");
-//   }
-
-//   next();
-// };
 
 const authP = (req, res, next) => {
   const usuario = verificarToken(req.cookies.ecommerce);
@@ -24,13 +17,15 @@ const authP = (req, res, next) => {
   next();
 };
 
-router.get("/registrate", (req, res) => {
+// router.get("/registrate", UsuariosController.registroUsuario);
+router.get("/registrate", (req, res) =>{
   let { error } = req.query;
 
   res.setHeader("Content-Type", "text/html");
   res.status(200).render("registrate", { error, login: false });
 });
 
+// router.get("/login", UsuariosController.loginUsuario);
 router.get("/login", (req, res) => {
   let { error, mensaje } = req.query;
 
@@ -63,33 +58,14 @@ router.get("/chat", authP, (req, res) => {
 });
 
 router.get("/products", authP, async (req, res) => {
-// router.get("/products", auth, async (req, res) => {
-  // let usuario;
-  // let login = false;
-  // let administrador = false;
-
-  // if (req.session.usuario) {
-  //   if (req.session.usuario.email === "adminCoder@coder.com") {
-  //     administrador = true;
-  //   }
-  //   login = true;
-  //   usuario = req.session.usuario;
-  // }
-  
-
   let usuario;
   let login = false;
-  // let administrador = false;
 
   if (req.usuario) {
-    // if (req.session.usuario.email === "adminCoder@coder.com") {
-    //   administrador = true;
-    // }
     login = true;
     usuario = req.usuario;
   } 
 
-// console.log(req.usuario);
 
   let pagina = 1;
 

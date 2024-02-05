@@ -21,7 +21,7 @@ export const initPassport = () => {
 
   //         if (!usuario) {
   //           let nuevoUsuario = {
-  //             nombre: profile._json.name,
+  //             first_name: profile._json.name,
   //             email: profile._json.email,
   //             profile
   //           };

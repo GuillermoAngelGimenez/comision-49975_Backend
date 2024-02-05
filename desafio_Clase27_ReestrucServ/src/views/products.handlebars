@@ -14,10 +14,10 @@
 
         {{else}}
             <div class="col-4">
-                <h5><i> Bienvenido/a, <strong>{{usuario.nombre}}  {{usuario.apellido}}</strong></i>.</h5>
+                <h5><i> Bienvenido/a, <strong>{{usuario.first_name}}  {{usuario.last_name}}</strong></i>.</h5>
             </div>
             <div class="col-2">
-                <h6><i> Rol: {{usuario.rol}} </i></h6>
+                <h6><i> Rol: {{usuario.role}} </i></h6>
             </div>
             <div class="col-6 botonLogout">
                 <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>

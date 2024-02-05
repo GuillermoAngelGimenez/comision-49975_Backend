@@ -24,7 +24,9 @@ import { httpSocket } from "./middleware/socket.js";
 
 import { messagesModelo } from "./dao/models/managerMessages.js";
 
-const PORT = 8080;
+import { config } from "./config/config.js";
+
+const PORT = config.PORT;
 const app = express();
 
 app.use(
@@ -32,11 +34,12 @@ app.use(
     secret: "codercoder123",
     resave: true,
     saveUninitialized: true,
-    store: mongoStore.create({mongoUrl: "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority",
-      mongoOptions: { dbName: "ecommerce" },
+    store: mongoStore.create({mongoUrl: config.MONGO_URL}),
+    mongoOptions: { dbName: config.DBNAME },
+    // store: mongoStore.create({mongoUrl: "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority",
+    //   mongoOptions: { dbName: "ecommerce" },
       ttl: 3600
     })
-  })
 );
 
 app.use(express.json());
@@ -98,12 +101,11 @@ io.on("connection", (socket) => {
   });
 });
 
-try {
-  await mongoose.connect(
-    "mongodb+srv://angelgag:Tiziana1812@cluster0.wf69a4m.mongodb.net/?retryWrites=true&w=majority", { dbName: "ecommerce" }
-  );
-
-  console.log("DB Online...!!!");
-} catch (error) {
-  console.log(error.usuario);
-}
+// try {
+//   await mongoose.connect(
+//     config.MONGO_URL, { dbName: config.DBNAME }
+//   );
+//   console.log("DB Online...!!!");
+// } catch (error) {
+//   console.log(error.usuario);
+// }

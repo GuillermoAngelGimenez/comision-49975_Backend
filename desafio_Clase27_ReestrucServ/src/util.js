@@ -3,13 +3,16 @@ import { dirname } from "path";
 import passport from "passport";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { config } from "./config/config.js";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default __dirname;
 
-export const SECRET = "Guille_123123456"; 
+// export const SECRET = "Guille_123123456"; 
+export const SECRET = config.SECRETKEY;
 
 export const creaHash = (password) =>bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 export const validaPassword = (usuario, password) => bcrypt.compareSync(password, usuario.password);
