@@ -5,6 +5,7 @@ import __dirname from "../util.js";
 import { cartsModelo } from "../dao/models/managerCarts.js";
 import { productsModelo } from "../dao/models/managerProducts.js";
 import mongoose from "mongoose";
+import { CartsController } from "../controller/carts.controller.js";
 
 const router = Router();
 
@@ -18,78 +19,11 @@ const auth = (req, res, next) => {
 
 router.use(auth);
 
-router.get("/", async (req, res) => {
-  let carritos = [];
-  try {
-    carritos = await cartsModelo.find();
+router.get("/", CartsController.getCarts);
 
-    if (req.query.limit) {
-      carritos = carritos.slice(0, req.query.limit);
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
+router.get("/:id", CartsController.getCartsById);
 
-  res.setHeader("Content-Type", "application/json");
-  res.status(200).json(carritos);
-});
-
-router.get("/:id", async (req, res) => {
-  let { id } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(400).json({
-      error: `El id ${id} no corresponde a ningún carrito existente...!!!`,
-    });
-  }
-
-  let existe;
-  try {
-    existe = await cartsModelo
-      .findOne({ _id: id })
-      .populate("products.idProducto")
-      .lean();
-  } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(500).json({
-      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message,
-    });
-  }
-
-  res.setHeader("Content-Type", "application/json");
-  return res.status(200).json(existe);
-});
-
-router.post("/", async (req, res) => {
-  let carritos;
-  try {
-    carritos = await cartsModelo.find();
-  } catch (error) {
-    console.log(error.message);
-  }
-
-  const io = req.app.get("io");
-
-  let newCarrito = {
-    // id,
-    products: [],
-  };
-
-  try {
-    let nuevoCarrito = await cartsModelo.create({ newCarrito });
-    console.log(nuevoCarrito);
-    res.setHeader("Content-Type", "application/json");
-    return res.status(200).json({ payload: nuevoCarrito });
-  } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(500).json({
-      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message,
-    });
-  }
-});
+router.post("/", CartsController.createCarrito);
 
 router.post("/:cid/product/:pid", async (req, res) => {
   let cid = req.params.cid;
@@ -545,67 +479,6 @@ router.delete("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-router.delete("/:cid", async (req, res) => {
-  let cid = req.params.cid;
-
-  if (!mongoose.Types.ObjectId.isValid(cid)) {
-    res.setHeader("Content-Type", "application/json");
-    return res
-      .status(400)
-      .json({ error: `Ingrese un id válido para el carrito...!!!` });
-  }
-
-  // validar que el id del carrito exista
-  let existe;
-  try {
-    existe = await cartsModelo.findOne({ _id: cid });
-    console.log(existe);
-  } catch (error) {
-    res.setHeader("Content-Type", "application/json");
-    return res.status(500).json({
-      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-      detalle: error.message,
-    });
-  }
-
-  if (!existe) {
-    res.setHeader("Content-Type", "application/json");
-    return res
-      .status(400)
-      .json({ error: `No existe un carrito con id ${cid}` });
-  }
-
-  if (existe.products.length === 0) {
-    res.setHeader("Content-Type", "application/json");
-    return res
-      .status(400)
-      .json({ error: `El carrito indicado no contiene productos` });
-  }
-
-  try {
-    let carritoVaciado = await cartsModelo.updateOne(
-      { _id: cid },
-      {
-        $set: {
-          products: [],
-        },
-      }
-    );
-
-    if (carritoVaciado.modifiedCount > 0) {
-      res.setHeader("Content-Type", "application/json");
-      return res
-        .status(200)
-        .json({ payload: "Productos eliminados correctamente del carrito." });
-    } else {
-      res.setHeader("Content-Type", "application/json");
-      return res
-        .status(400)
-        .json({ error: `No se concretó la eliminación del producto` });
-    }
-  } catch (error) {
-    console.error("Error al eliminar los productos del carrito:", error);
-  }
-});
+router.delete("/:cid", CartsController.deleteProducto);
 
 export default router;

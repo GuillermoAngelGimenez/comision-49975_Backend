@@ -1,9 +1,6 @@
 import { Router } from "express";
-
 import { passportCall, generaToken, verificarToken } from "../util.js";
-
 import passport from "passport";
-
 import { MiRouter } from "./router.js";
 
 // router.get("/errorRegistro", async (req, res) => {
@@ -79,8 +76,6 @@ export class SessionsRouter extends MiRouter {
         res.redirect("/products");
       }
     );
-
-    
 
   }
 }
