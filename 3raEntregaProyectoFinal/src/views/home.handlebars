@@ -1,0 +1,38 @@
+<div class="row tituloHome">
+    <div class="col-10">
+        <h1>Listado de Productos</h1>
+    </div>
+    <div class="col-2 botonesHome">
+            <a class="btn btn-outline-secondary btn-sm" href="/registrate" role="button">Registrate</a>
+            <br>
+            <a class="btn btn-outline-secondary btn-sm" href="/login" role="button">Login</a>
+    </div>
+</div>
+
+<hr>
+
+    {{#each productos}} 
+        <div>
+            <h4>{{this.title}}</h4>
+            <p>Descripción: {{this.description}}</p>
+            <p>Precio: {{this.price}} - Stock: {{this.stock}} </p>
+            <hr>
+        </div>
+    {{/each}}
+
+<hr>
+
+<br>
+
+
+<div class="botones-principal">
+<a class="btn btn-primary" href="/realtimeproducts" role="button">Edición de Productos</a>
+
+<a class="btn btn-primary" href="/chat" role="button">CHAT</a>
+
+<a class="btn btn-primary" href="/products" role="button">Productos Páginados</a>
+
+<a class="btn btn-primary" href="/carts/657a105368dbce28a5484694" id="miCarrito" role="button">Mi Carrito</a>
+</div>
+
+
