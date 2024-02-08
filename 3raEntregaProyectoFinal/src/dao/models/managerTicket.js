@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from 'uuid';
 
-export const usuariosModelo = mongoose.model(
-  "usuarios", 
+export const ticketsModelo = mongoose.model(
+  "tickets", 
   new mongoose.Schema(
     {
       code: { 
         type: String, 
-        required: true, 
+        default: uuidv4, 
         unique: true 
       },
       purchase_datetime: { 
