@@ -59,6 +59,12 @@ app.use("/api/products", httpSocket, routerProductos);
 app.use("/api/carts", routerCarts);
 app.use("/", productosRouterVista);  
 
+// Manejar la ruta /ticket para renderizar ticket.handlebars
+// app.get('/ticket', (req, res) => {
+//   const ticketData = JSON.parse(req.query.ticket);
+//   res.render('ticket', { ticketData });
+// });
+
 const sessionsRouter = new SessionsRouter();
 // app.use("/api/sessions", sessionRouter);
 app.use("/api/sessions", sessionsRouter.getRouter());
@@ -99,13 +105,8 @@ io.on("connection", (socket) => {
       io.emit("usuarioDesconectado", usuario.nombre);
     }
   });
+
+
 });
 
-// try {
-//   await mongoose.connect(
-//     config.MONGO_URL, { dbName: config.DBNAME }
-//   );
-//   console.log("DB Online...!!!");
-// } catch (error) {
-//   console.log(error.usuario);
-// }
+

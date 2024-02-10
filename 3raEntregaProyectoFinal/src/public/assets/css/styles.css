@@ -35,6 +35,17 @@ hr {
   margin-right: 13rem;
 }
 
+.botones-carrito{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border: black solid 1px;
+  border-radius: 15px;
+  padding: 1rem;
+  margin-left: 13rem;
+  margin-right: 13rem;
+}
+
 a{
     width: 13rem;
 }

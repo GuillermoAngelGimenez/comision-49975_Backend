@@ -47,6 +47,12 @@ router.get("/realtimeproducts", authP, async (req, res) => {
     console.log(error.message);
   }
 
+  try {
+    productos = await productsModelo.find({ deleted: false }).lean();
+  } catch (error) {
+    console.log(error.message);
+  }
+
   const io = req.app.get("io");
   io.emit("resultado", productos);
 

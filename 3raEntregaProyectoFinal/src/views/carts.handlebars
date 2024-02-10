@@ -20,8 +20,9 @@
     }
   </style>
 
-
-
+  {{!-- <div id="info-ticket">
+      
+  </div> --}}
 
 
 {{#if carrito.products}}
@@ -62,11 +63,44 @@
 
     <p class="total-carrito">Total: ${{totalAcumulado}}</p>
 
+    {{!-- <p class="total-carrito">Idcarrito: {{carrito._id}}</p> --}}
+
+  <div class="botones-carrito">
+      <a class="btn btn-primary" href="/products" role="button">Volver</a>
+      <a class="btn btn-success" role="button" data-endpoint="/api/carts/{{carrito._id}}/purchase" id="botonComprar">Comprar</a>
+  </div>
+  
 {{else}}
     <h4 class="mensaje-sin-productos">El carrito indicado no contiene productos</h4>
 
+  <div class="botones-websocket">
+      <a class="btn btn-primary" href="/products" role="button">Volver</a>
+  </div>
 {{/if}}
 
-<div class="botones-websocket">
-    <a class="btn btn-primary" href="/products" role="button">Volver</a>
-</div>
+<script>
+        const botonComprar = document.getElementById('botonComprar');
+        
+        botonComprar.addEventListener('click', async () => {
+            try {
+                const endpoint = botonComprar.dataset.endpoint;
+                const response = await fetch(endpoint, {
+                  method: 'POST',
+                  });
+
+                if (response.ok) {
+                  const ticketData = await response.json();
+                  console.log("respuesta OK");
+
+
+                    }
+                } else {
+                  console.error('Error al realizar la compra:', response.statusText)
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+  </script>
+

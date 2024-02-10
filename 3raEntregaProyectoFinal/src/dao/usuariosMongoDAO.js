@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import { usuariosModelo } from "./models/managerUsuarios.js"
+import { cartsModelo } from "./models/managerCarts.js"
 import { config } from "../config/config.js"
 import { Conexion } from "../conexion.js"
 
@@ -23,7 +24,16 @@ export class UsuariosMongoDAO{
 
     async getBy(email){
       let usuario;
-      return usuario = await usuariosModelo.findOne({email}).lean();
+      usuario = await usuariosModelo.findOne({email}).lean();
+
+      const cartId = usuario.cart.toString();
+
+      let nuevoUsuario = {
+        ...usuario,
+        cartId
+      }
+    //   console.log(nuevoUsuario);
+      return nuevoUsuario;
     }
 
     async create(usuario){

@@ -65,10 +65,6 @@
 
 </div>
 
-{{!-- <div class="botones-websocket">
-    <a class="btn btn-primary" href="/" role="button">Volver al Listado</a>
-</div> --}}
-
 <br>
 
 {{>menu}}
@@ -105,5 +101,8 @@
             handleAddToCartClick(event);
         }
     });
+
+        let carritoUsuario = document.getElementById("miCarrito");
+        carritoUsuario.href = "/carts/{{usuario.cartId}}";
 </script>
 

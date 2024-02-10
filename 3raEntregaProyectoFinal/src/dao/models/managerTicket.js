@@ -22,10 +22,6 @@ export const ticketsModelo = mongoose.model(
         type: String, 
         required: true 
       },
-      // cart: {
-      //   type: mongoose.Schema.Types.ObjectId,
-      //   ref: "carts"
-      // },
     },
     {
       strict: false,

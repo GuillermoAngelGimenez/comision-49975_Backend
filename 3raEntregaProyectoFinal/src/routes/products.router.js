@@ -6,15 +6,15 @@ import mongoose from "mongoose";
 
 export const router = Router();
 
-const auth = (req, res, next) => {
-  if (!req.session.usuario) {
-    return res.redirect("/login");
-  }
+// const auth = (req, res, next) => {
+//   if (!req.session.usuario) {
+//     return res.redirect("/login");
+//   }
 
-  next();
-};
+//   next();
+// };
 
-router.use(auth);
+// router.use(auth);
 
 router.get("/", ProductosController.getProductosValidation);
 

@@ -41,7 +41,7 @@ export class SessionsRouter extends MiRouter {
       
       if (req.headers['content-type'] === 'application/json') {
         // console.log("hola en la API")
-        res.success(`Login correcto para el usuario:${req.user.first_name}, con rol:${req.user.role}`); 
+        res.success(`Login correcto para el usuario:${req.user.email}, con rol:${req.user.role}`); 
       } else {
         // console.log("hola en la interfaz")
         res.redirect("/products");

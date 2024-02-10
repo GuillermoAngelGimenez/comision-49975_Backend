@@ -4,20 +4,22 @@ import fs from "fs";
 import __dirname from "../util.js";
 import { cartsModelo } from "../dao/models/managerCarts.js";
 import { productsModelo } from "../dao/models/managerProducts.js";
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import { CartsController } from "../controller/carts.controller.js";
+import { usuariosModelo } from "../dao/models/managerUsuarios.js";
+import { ticketsModelo } from "../dao/models/managerTicket.js";
 
 const router = Router();
 
-const auth = (req, res, next) => {
-  if (!req.session.usuario) {
-    return res.redirect("/login");
-  }
+// const auth = (req, res, next) => {
+//   if (!req.session.usuario) {
+//     return res.redirect("/login");
+//   }
 
-  next();
-};
+//   next();
+// };
 
-router.use(auth);
+// router.use(auth);
 
 router.get("/", CartsController.getCarts);
 
@@ -186,6 +188,116 @@ router.post("/:cid/product/:pid", async (req, res) => {
       });
     }
   }
+});
+
+router.post("/:cid/purchase", async (req, res) => {
+  let cid = req.params.cid;
+
+  if (!mongoose.Types.ObjectId.isValid(cid)) {
+    res.setHeader("Content-Type", "application/json");
+    return res
+      .status(400)
+      .json({ error: `Ingrese un id válido para el carrito...!!!` });
+  }
+
+
+  try {
+    const existe = await cartsModelo.findOne({ _id: cid });
+
+    if (!existe) {
+      res.setHeader("Content-Type", "application/json");
+      return res
+        .status(400)
+        .json({ error: `No existe un carrito con id ${cid}` });
+    }
+
+    // validar si el carrito contiene productos
+    const productosArray = existe.products;
+
+    if(productosArray.length<1){
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: `No es posible generar el ticket dado que el carrito se encuentra vacío` });
+    }
+
+    let productosTicket = [];
+    let productosCarrito = [];
+    let productosCarritoV = [];
+
+    // Verificar el stock y guardar los IDs de productos en los arrays correspondientes
+    for (const product of productosArray) {
+        const productData = await productsModelo.findById(product.idProducto);
+
+        if (!productData) {
+          return res.status(404).json({ message: `el Producto con ID ${product.idProducto} no se encontró` });
+        }
+
+        if (productData.stock >= product.quantity) {
+          productosTicket.push(product);
+
+          // Reducir el stock del producto en la base de datos
+          await productsModelo.findByIdAndUpdate(product.idProducto, { $inc: { stock: -product.quantity } });
+        } else {
+          productosCarrito.push(product.idProducto.toString());
+          productosCarritoV.push({ idProducto: product.idProducto, quantity: product.quantity });
+        }
+    }
+
+    let usuario = [];
+    if (productosTicket.length > 0) {
+      // usuario = await usuariosModelo.findOne({email : "angelalbornoz@gmail.com"}).lean();
+      usuario = await usuariosModelo.findOne({cart : cid}).lean();
+      // console.log({usuario: usuario});
+
+      if (!usuario) {         
+          return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+      // console.log(productosTicket);
+      // console.log(productosCarrito);
+
+      // Calcular el monto total de la compra
+      let amountTotal = 0;
+
+      for (const product of productosTicket) {
+        const productData = await productsModelo.findOne({_id: product.idProducto.toString()});
+        amountTotal = amountTotal + (productData.price * product.quantity);
+    }
+
+      const newTicket = new ticketsModelo({
+          purchase_datetime: new Date(),
+          amount: amountTotal,
+          purchaser: usuario.email
+      });
+
+    await newTicket.save();
+      // ---------------------
+      
+
+    cartsModelo.findByIdAndUpdate({_id: cid}, { products: productosCarritoV }, { new: true })
+    .then(carritoActualizado => {
+        console.log("Carrito actualizado:", carritoActualizado);
+    })
+    .catch(error => {
+        console.error("Error al actualizar el carrito:", error);
+    });
+
+    // io.emit('ticket-creado', { message: "Compra realizada con éxito", ticket: newTicket });
+  
+    // res.render('carts', { ticketData: ticket }); // ticketData es un objeto con los datos del ticket
+
+      if(productosCarrito.length > 0){
+        return res.status(200).json(`Quedaron en el carrito los siguientes productos ${productosCarrito} y se genero el ticket ${newTicket}`);
+      }else{
+        return res.status(200).json({ message: "Compra realizada con éxito", ticket: newTicket });}
+
+    } else {
+        return res.status(400).json({ message: "No hay suficiente stock para realizar la compra", productosCarrito });
+    }
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error interno del servidor" });
+  }
+  
 });
 
 router.put("/:cid/products/:pid", async (req, res) => {
