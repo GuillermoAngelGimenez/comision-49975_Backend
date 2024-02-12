@@ -94,65 +94,33 @@
 <script>
 const botonComprar = document.getElementById('botonComprar');
 
+botonComprar.addEventListener('click', async () => {
+  try {
+    const endpoint = botonComprar.dataset.endpoint;
+    const response = await fetch(endpoint, { method: 'POST' });
 
-botonComprar.addEventListener('click', async function () {
-  const endpoint = botonComprar.dataset.endpoint;
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      
+      if (data.ticket) {
+        // Recargar la página después de generar el ticket
+        console.log(data);
+        location.reload();
+      } else {
+        document.getElementById('message-container').innerHTML = '<div class="alert alert-danger" role="alert">No se pudo generar el ticket. ' + data.message + '</div>';
+      }
+    } else {
+      console.error('Error al realizar la compra:', response.statusText)
+    }
 
-  fetch(endpoint, {method: 'POST', body: console.log(endpoint)
-        }).then(response => response.json())
-        .then(data => {
-        switch (data.compra) {
-          case 'sinStock':
-            Toastify({
-              text: "No hay suficiente stock para realizar la compra...\nDisculpe las molestias.",
-              duration: 3000,
-              gravity: "top",
-              position: "center",
-              style: {
-                      background: "red",
-                  }
-            }).showToast();
-            break;
-          
-          case 'parcial':
-            console.log(data);          
-              Toastify({
-                  text: "Los productos que permanecen en el carrito no se pudieron comprar por falta de stock\nSu ticket es: \nCódigo: " + data.code + "\nMonto: $" + data.amount + "\nFecha-Hora de Compra: " + data.purchase_datetime + "\nGracias!!!",
-                  duration: 6000,
-                  gravity: "top",
-                  position: "center",
-                  style: {
-                      background: "linear-gradient(to blue, grey, black)",
-                  }
-              }).showToast();
 
-            setTimeout(function() {
-              location.reload();
-            }, 6000);
 
-            break;
-
-          case 'total':
-            console.log(data);        
-              Toastify({
-                  text: "Su ticket es: \nCódigo: " + data.code + "\nMonto: $" + data.amount + "\nFecha-Hora de Compra: " + data.purchase_datetime + "\nGracias!!!",
-                  duration: 4000,
-                  gravity: "top",
-                  position: "center",
-                  style: {
-                      background: "linear-gradient(to blue, grey, black)",
-                  }
-              }).showToast();
-            
-            setTimeout(function() {
-              location.reload();
-            }, 4000);
-            break;
-
-          }
-        })
+  } catch (error) {
+    console.error('Error:', error);
   }
-);
-
+});
 </script>
 
+<script src="socket.io/socket.io.js"></script>
+<script src="../public/js/pago.js"></script>

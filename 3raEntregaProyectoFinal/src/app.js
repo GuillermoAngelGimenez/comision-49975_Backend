@@ -16,7 +16,7 @@ import cookieParser from "cookie-parser";
 // import { router as sessionRouter } from "./routes/session.router.js";
 import { SessionsRouter } from "./routes/session.router.js";
 
-import { inicializarPassport } from "./config/config.passport.js"  ;
+import { inicializarPassport } from "./config/config.passport.js" ;
 // import { initPassport } from "./config/config.passport.git.js";
           
 import { Server } from "socket.io";
@@ -56,14 +56,9 @@ app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "/views"));
 
 app.use("/api/products", httpSocket, routerProductos);
-app.use("/api/carts", routerCarts);
+app.use("/api/carts", httpSocket, routerCarts);
+// app.use("/api/carts", routerCarts);
 app.use("/", productosRouterVista);  
-
-// Manejar la ruta /ticket para renderizar ticket.handlebars
-// app.get('/ticket', (req, res) => {
-//   const ticketData = JSON.parse(req.query.ticket);
-//   res.render('ticket', { ticketData });
-// });
 
 const sessionsRouter = new SessionsRouter();
 // app.use("/api/sessions", sessionRouter);
@@ -72,6 +67,16 @@ app.use("/api/sessions", sessionsRouter.getRouter());
 const serverHTTP = app.listen(PORT, () => {
   console.log(`Server escuchando en puerto ${PORT}`);
 });
+
+
+// agregado para ticket 
+// import { Server } from 'socket.io';
+// import { httpSocket } from './middleware/socket.js';
+
+// const serverHTTP = httpSocket.listen(PORT);
+// const io = new Server(server);
+// -----------
+
 
 export const io = new Server(serverHTTP);
 
@@ -106,7 +111,10 @@ io.on("connection", (socket) => {
     }
   });
 
-
 });
+
+
+
+
 
 

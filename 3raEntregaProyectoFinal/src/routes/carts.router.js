@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { io } from "../app.js";
 import path from "path";
 import fs from "fs";
 import __dirname from "../util.js";
@@ -9,7 +10,8 @@ import { CartsController } from "../controller/carts.controller.js";
 import { usuariosModelo } from "../dao/models/managerUsuarios.js";
 import { ticketsModelo } from "../dao/models/managerTicket.js";
 
-const router = Router();
+export const router = Router();
+
 
 // const auth = (req, res, next) => {
 //   if (!req.session.usuario) {
@@ -244,16 +246,11 @@ router.post("/:cid/purchase", async (req, res) => {
 
     let usuario = [];
     if (productosTicket.length > 0) {
-      // usuario = await usuariosModelo.findOne({email : "angelalbornoz@gmail.com"}).lean();
       usuario = await usuariosModelo.findOne({cart : cid}).lean();
-      // console.log({usuario: usuario});
 
       if (!usuario) {         
           return res.status(404).json({ message: "Usuario no encontrado" });
       }
-
-      // console.log(productosTicket);
-      // console.log(productosCarrito);
 
       // Calcular el monto total de la compra
       let amountTotal = 0;
@@ -261,7 +258,7 @@ router.post("/:cid/purchase", async (req, res) => {
       for (const product of productosTicket) {
         const productData = await productsModelo.findOne({_id: product.idProducto.toString()});
         amountTotal = amountTotal + (productData.price * product.quantity);
-    }
+      }
 
       const newTicket = new ticketsModelo({
           purchase_datetime: new Date(),
@@ -270,9 +267,9 @@ router.post("/:cid/purchase", async (req, res) => {
       });
 
     await newTicket.save();
-      // ---------------------
-      
 
+    let promiseTicket = await ticketsModelo.findOne({purchaser: usuario.email, purchase_datetime: newTicket.purchase_datetime}).lean();
+      
     cartsModelo.findByIdAndUpdate({_id: cid}, { products: productosCarritoV }, { new: true })
     .then(carritoActualizado => {
         console.log("Carrito actualizado:", carritoActualizado);
@@ -281,19 +278,29 @@ router.post("/:cid/purchase", async (req, res) => {
         console.error("Error al actualizar el carrito:", error);
     });
 
-    // io.emit('ticket-creado', { message: "Compra realizada con éxito", ticket: newTicket });
-  
-    // res.render('carts', { ticketData: ticket }); // ticketData es un objeto con los datos del ticket
-
       if(productosCarrito.length > 0){
-        return res.status(200).json(`Quedaron en el carrito los siguientes productos ${productosCarrito} y se genero el ticket ${newTicket}`);
+        promiseTicket = {
+          compra: "parcial",
+          ...promiseTicket
+        }    
+        console.log(promiseTicket);
+        // return res.status(200).json(message: `Quedaron en el carrito los siguientes productos ${productosCarrito} y se generó el ticket ${newTicket}`, ticket: newTicket );
+        return res.status(200).json(promiseTicket);
       }else{
-        return res.status(200).json({ message: "Compra realizada con éxito", ticket: newTicket });}
-
-    } else {
-        return res.status(400).json({ message: "No hay suficiente stock para realizar la compra", productosCarrito });
+        promiseTicket = {
+          compra: "total",
+          ...promiseTicket
+        }    
+        return res.status(200).json(promiseTicket);
+      } 
+    }else {
+      let promiseTicket = {
+        compra: "sinStock"
+      }    
+        return res.status(200).json(promiseTicket);
+    }   
     }
-  } catch (error) {
+  catch(error) {
       console.error(error);
       return res.status(500).json({ message: "Error interno del servidor" });
   }
@@ -593,4 +600,5 @@ router.delete("/:cid/products/:pid", async (req, res) => {
 
 router.delete("/:cid", CartsController.deleteProducto);
 
+export {io};
 export default router;
