@@ -2,6 +2,7 @@ import { Router } from "express";
 import { passportCall, generaToken, verificarToken } from "../util.js";
 import passport from "passport";
 import { MiRouter } from "./router.js";
+import usuarioDTO from "../dao/DTOs/usuario.dto.js";
 
 // router.get("/errorRegistro", async (req, res) => {
 //   return res.redirect("/registro?error=Error en el proceso de registro");
@@ -52,27 +53,10 @@ export class SessionsRouter extends MiRouter {
       // console.log(req);
       const usuario = verificarToken(req.cookies.ecommerce);
       // res.success(usuario);
-      // return;
-      // res.status(200).json(usuario);
-      // return;
 
-      // modificación en la respuesta
       const { _id, __v, iat, exp, ...usuarioSinCampos } = usuario;
-
-      // Formatear la fecha
-      const fechaAlta = new Date(usuario.FechaAlta);
-      const fechaFormateada = `${fechaAlta.getDate()}/${fechaAlta.getMonth() + 1}/${fechaAlta.getFullYear()}`;
-
-      const newUsuario = {
-        first_name: usuarioSinCampos.first_name,
-        last_name: usuarioSinCampos.last_name,
-        email: usuarioSinCampos.email,
-        age: usuarioSinCampos.age,
-        cart: usuarioSinCampos.cart,
-        role: usuarioSinCampos.role,
-        FechaAlta: fechaFormateada,
-        cartId: usuarioSinCampos.cartId
-      };
+      
+      const newUsuario = new usuarioDTO({usuarioSinCampos})
 
       res.success(newUsuario);
 
