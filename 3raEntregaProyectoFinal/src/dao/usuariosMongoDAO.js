@@ -26,6 +26,9 @@ export class UsuariosMongoDAO{
       let usuario;
       usuario = await usuariosModelo.findOne({email}).lean();
 
+      if (usuario  === null)
+        return null;
+
       const cartId = usuario.cart.toString();
 
       let nuevoUsuario = {

@@ -36,9 +36,6 @@ export class SessionsRouter extends MiRouter {
       let token = generaToken(req.user);
 
       res.cookie("ecommerce", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
-
-      // let rolUsuario = req.user.role;
-      // console.log(rolUsuario);
       
       if (req.headers['content-type'] === 'application/json') {
         // console.log("hola en la API")
@@ -52,9 +49,8 @@ export class SessionsRouter extends MiRouter {
     });
 
     this.get("/current", ["PUBLIC"], (req, res) => {
-      console.log(req);
+      // console.log(req);
       const usuario = verificarToken(req.cookies.ecommerce);
-      // console.log(usuario);
       res.success(usuario);
       });
 
