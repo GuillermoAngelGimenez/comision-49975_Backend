@@ -51,8 +51,32 @@ export class SessionsRouter extends MiRouter {
     this.get("/current", ["PUBLIC"], (req, res) => {
       // console.log(req);
       const usuario = verificarToken(req.cookies.ecommerce);
-      res.success(usuario);
-      });
+      // res.success(usuario);
+      // return;
+      // res.status(200).json(usuario);
+      // return;
+
+      // modificación en la respuesta
+      const { _id, __v, iat, exp, ...usuarioSinCampos } = usuario;
+
+      // Formatear la fecha
+      const fechaAlta = new Date(usuario.FechaAlta);
+      const fechaFormateada = `${fechaAlta.getDate()}/${fechaAlta.getMonth() + 1}/${fechaAlta.getFullYear()}`;
+
+      const newUsuario = {
+        first_name: usuarioSinCampos.first_name,
+        last_name: usuarioSinCampos.last_name,
+        email: usuarioSinCampos.email,
+        age: usuarioSinCampos.age,
+        cart: usuarioSinCampos.cart,
+        role: usuarioSinCampos.role,
+        FechaAlta: fechaFormateada,
+        cartId: usuarioSinCampos.cartId
+      };
+
+      res.success(newUsuario);
+
+    });
 
     this.get("/logout", ["PUBLIC"], (req, res) => {
       res.clearCookie("ecommerce");
