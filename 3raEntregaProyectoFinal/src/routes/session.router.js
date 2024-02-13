@@ -37,7 +37,8 @@ export class SessionsRouter extends MiRouter {
 
       res.cookie("ecommerce", token, {httpOnly: true, maxAge: 1000 * 60 * 60});
 
-      // console.log(req.headers);
+      // let rolUsuario = req.user.role;
+      // console.log(rolUsuario);
       
       if (req.headers['content-type'] === 'application/json') {
         // console.log("hola en la API")
@@ -45,6 +46,7 @@ export class SessionsRouter extends MiRouter {
       } else {
         // console.log("hola en la interfaz")
         res.redirect("/products");
+        // res.render("products", {rolUsuario: rolUsuario});
       }
 
     });

@@ -10,8 +10,6 @@ import { config } from "./config.js";
 // ---agregado para github
 import github from "passport-github2";
 
-
-
 const buscarToken = (req) => {
   let token = null;
 
@@ -52,7 +50,6 @@ export const inicializarPassport = () => {
             return done(null, false);
           }
 
-            // let usuario = await usuariosModelo.findOne({ email: username }).lean();
             let usuario = await usuariosService.getUsuarioByEmail(username);
             if (!usuario) {
               return done(null, false, { message: `Se ingresaron credenciales incorrectas` });

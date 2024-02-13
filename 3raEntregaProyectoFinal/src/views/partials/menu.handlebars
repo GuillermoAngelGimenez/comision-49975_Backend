@@ -1,10 +1,17 @@
 <div class="botones-principal">
     {{#if login}}
-        <a class="btn btn-primary" href="/realtimeproducts" role="button">Edición de Productos</a>
+        {{#if (eq usuario.role 'admin')}}
+            <a class="btn btn-primary" href="/realtimeproducts" role="button">Edición de Productos</a>
 
-        <a class="btn btn-primary" href="/chat" role="button">CHAT</a>
+            <a class="btn btn-primary" href="/carts/0000" id="miCarrito" role="button">Mi Carrito</a>
+        {{else}}
+            <a class="btn btn-primary" href="/realtimeproducts" role="button">Edición de Productos</a>
 
-        <a class="btn btn-primary" href="/carts/0000" id="miCarrito" role="button">Mi Carrito</a>
+            <a class="btn btn-primary" href="/chat" role="button">CHAT</a>
+
+            <a class="btn btn-primary" href="/carts/0000" id="miCarrito" role="button">Mi Carrito</a>
+
+        {{/if}}
     {{else}}
         <a class="btn btn-primary" href="/login" role="button">Login</a>
 

@@ -26,8 +26,12 @@ import { messagesModelo } from "./dao/models/managerMessages.js";
 
 import { config } from "./config/config.js";
 
+import handlebarsHelpers from 'handlebars-helpers' 
+
 const PORT = config.PORT;
 const app = express();
+
+handlebarsHelpers();
 
 app.use(
   sessions({
@@ -52,12 +56,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.engine("handlebars", engine());
+app.engine('.hbs', engine({ extname: '.hbs' }));
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "/views"));
 
 app.use("/api/products", httpSocket, routerProductos);
-app.use("/api/carts", httpSocket, routerCarts);
-// app.use("/api/carts", routerCarts);
+app.use("/api/carts", routerCarts);
 app.use("/", productosRouterVista);  
 
 const sessionsRouter = new SessionsRouter();

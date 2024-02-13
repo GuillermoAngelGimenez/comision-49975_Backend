@@ -1,7 +1,7 @@
 <hr>
 <div class="row">
     {{#if login}}
-        {{#if administrador}}
+        {{!-- {{#if administrador}}
             <div class="col-6">
                 <h5><i> Bienvenido <strong>Administrador "adminCoder@coder.com"</strong></i>.</h5>
             </div>
@@ -11,8 +11,7 @@
             <div class="col-4 botonLogout">
                 <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
             </div>
-
-        {{else}}
+        {{else}} --}}
             <div class="col-4">
                 <h5><i> Bienvenido/a, <strong>{{usuario.first_name}}  {{usuario.last_name}}</strong></i>.</h5>
             </div>
@@ -22,9 +21,8 @@
             <div class="col-6 botonLogout">
                 <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
             </div>    
-        {{/if}}
-    {{else}}
-
+        {{!-- {{/if}}
+    {{else}} --}}
     {{/if}}
 
 </div>
@@ -33,15 +31,24 @@
     <h1>Listado de Productos Páginados</h1>
 </div>
 <ul>
-    {{#each productos}}
-        <li class="productos-paginados" data-id={{this._id}}>
-            <h4>{{this.title}}</h4>
-            <p><strong>Descripción:</strong> {{this.description}} - <strong>Precio:</strong> ${{this.price}}</p>
-            <div>
-                <button class="addCarrito btn btn-primary" data-product-id="{{this._id}}">Agregar al Carrito</button>
-            </div>
-        </li>
-    {{/each}}
+    {{#if (eq usuario.role 'user')}}
+        {{#each productos}}
+            <li class="productos-paginados" data-id={{this._id}}>
+                <h4>{{this.title}}</h4>
+                <p><strong>Descripción:</strong> {{this.description}} - <strong>Precio:</strong> ${{this.price}}</p>
+                <div>
+                    <button class="addCarrito btn btn-primary" data-product-id="{{this._id}}">Agregar al Carrito</button>
+                </div>
+            </li>
+        {{/each}}
+    {{else}}
+            {{#each productos}}
+            <li class="productos-paginados" data-id={{this._id}}>
+                <h4>{{this.title}}</h4>
+                <p><strong>Descripción:</strong> {{this.description}} - <strong>Precio:</strong> ${{this.price}}</p>
+            </li>
+        {{/each}}
+    {{/if}}
 </ul>
 <br>
 
