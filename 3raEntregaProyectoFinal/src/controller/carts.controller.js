@@ -64,7 +64,6 @@ export class CartsController{
       };
     
       try {
-        // let nuevoCarrito = await cartsModelo.create({ newCarrito });
         let nuevoCarrito = await cartsService.createCarrito(newCarrito);
         console.log(nuevoCarrito);
         res.setHeader("Content-Type", "application/json");

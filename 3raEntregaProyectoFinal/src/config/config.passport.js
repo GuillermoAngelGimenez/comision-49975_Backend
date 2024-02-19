@@ -1,14 +1,11 @@
 import passport from "passport";
 import local from "passport-local";
 import passportJWT from "passport-jwt";
+import cookieParser from "cookie-parser";
 import { usuariosService } from "../services/usuarios.service.js";
 import { cartsService } from "../services/carts.service.js";
 import { creaHash, validaPassword, SECRET, verificarToken } from "../util.js";
-import { MiRouter } from "../routes/router.js";
 import { config } from "./config.js";
-
-// ---agregado para github
-import github from "passport-github2";
 
 const buscarToken = (req) => {
   let token = null;
@@ -47,10 +44,12 @@ export const inicializarPassport = () => {
         try {
    
           if (!username || !password) {
-            return done(null, false);
+            // return done(null, false);
+            return done(null, false, { message: `No se ingreso el mail y la password` });
           }
 
             let usuario = await usuariosService.getUsuarioByEmail(username);
+            
             if (!usuario) {
               return done(null, false, { message: `Se ingresaron credenciales incorrectas` });
             }
@@ -106,8 +105,7 @@ export const inicializarPassport = () => {
 
           let existeCarrito;
           try {
-            // existeCarrito = await cartsModelo.findOne({ _id: cart }).lean();
-            existeCarrito = await cartsService.getCartById(cart).lean();
+            existeCarrito = await cartsService.getCartById(cart);
           } catch (error) {
             return done(null, false, {message: `No existe el carrito con id: ${cart}`});
           }
@@ -133,37 +131,5 @@ export const inicializarPassport = () => {
       }
     )
   );
-
-  passport.use("github", new github.Strategy(
-    {
-      clientID: "Iv1.38bd9ed162be36e1",
-      clientSecret: "c301e75df7203dee2697f43aaf853624deaf6f3f",
-      callbackURL: "http://localhost:8080/api/sessions/callbackGithub"
-    },
-
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        console.log(profile);
-        // let usuario = await usuariosModelo.findOne({username: profile._json.email});
-        let usuario = await usuariosService.getUsuarioByEmail(profile._json.email); ;
-        
-        if (!usuario) {
-          let nuevoUsuario = {
-            first_name: profile._json.name,
-            email: profile._json.email,
-            profile
-          };
-
-          // usuario = await usuariosModelo.create(nuevoUsuario);
-          usuario = await usuariosService.createUsuario(nuevoUsuario);
-        }
-
-        return done(null, usuario);
-      } catch (error) {
-        return done(error);
-      }
-    }
-  )
-);
 
 };

@@ -15,11 +15,14 @@ export class MiRouter{
 
     get(ruta, permisos, ...funciones){ // ... son aquí el operador rest, que alamacena los argumentos que lleguen en un array llamado funciones
         // this.router.get(ruta, this.misRespuestas, passportCall("jwt"), this.acceso(permisos), this.agregaTryCatch(funciones))
-        this.router.get(ruta, this.misRespuestas, (ruta!=="/api/sessions/current")?passportCall("jwt"):(req,res,next)=>{next()}, this.acceso(permisos), this.agregaTryCatch(funciones))
-        // this.router.get(ruta, this.misRespuestas, this.acceso(permisos), this.agregaTryCatch(funciones))
+        this.router.get(ruta, this.misRespuestas, (ruta!=="/api/sessions/current" && ruta!=="/github" &&  ruta!=="/callbackGithub" && ruta!=="/github" &&  ruta!=="/callbackGithub")?passportCall("jwt"):(req,res,next)=>{next()}, this.acceso(permisos), this.agregaTryCatch(funciones))        
     }
 
     post(ruta, permisos, ...funciones){ // ... son aquí el operador rest, que alamacena los argumentos que lleguen en un array llamado funciones
+        // if (ruta==="/login")
+        //     this.router.post(ruta, (req,res,next)=>{next()}, this.acceso(permisos), this.agregaTryCatch(funciones))
+        // else 
+        //     this.router.post(ruta, this.misRespuestas, (ruta!=="/registro")?passportCall("jwt"):(req,res,next)=>{next()}, this.acceso(permisos), this.agregaTryCatch(funciones))
         this.router.post(ruta, this.misRespuestas, (ruta!=="/login" && ruta!=="/registro")?passportCall("jwt"):(req,res,next)=>{next()}, this.acceso(permisos), this.agregaTryCatch(funciones))
     }
 

@@ -7,7 +7,7 @@ import { cartsModelo } from "./models/managerCarts.js";
 
 export class CartsMongoDAO{
     async get(){
-        return await cartsModelo.find()
+        return await cartsModelo.find().populate("products.idProducto")
     }
 
     async getByPopulate(id){
@@ -15,7 +15,7 @@ export class CartsMongoDAO{
     }
 
     async getBy(id){
-      return await cartsModelo.findOne({ _id: id });
+      return await cartsModelo.findOne({_id: id });
     }
 
     async create(carrito){

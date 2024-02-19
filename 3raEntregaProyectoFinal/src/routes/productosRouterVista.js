@@ -2,7 +2,6 @@ import { Router } from "express";
 import { productsModelo } from "../dao/models/managerProducts.js";
 import { cartsModelo } from "../dao/models/managerCarts.js";
 import mongoose from "mongoose";
-// import { UsuariosController } from "../controller/usuarios.controller.js";
 
 import { verificarToken } from "../util.js";
 

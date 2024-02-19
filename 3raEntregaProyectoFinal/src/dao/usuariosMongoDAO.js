@@ -22,20 +22,36 @@ export class UsuariosMongoDAO{
         return usuariosModelo.find()
     }
 
-    async getBy(email){
+    async getByEmail(email){
       let usuario;
       usuario = await usuariosModelo.findOne({email}).lean();
 
       if (usuario  === null)
         return null;
 
-      const cartId = usuario.cart.toString();
+      let cartId;
+      if (usuario.cart) {
+        cartId = usuario.cart.toString();
+      } else {
+        // Si usuario.cart es undefined o null, asigna un valor por defecto o maneja la situación según tus requerimientos
+        cartId = ''; // O cualquier valor por defecto que desees
+      }
 
       let nuevoUsuario = {
         ...usuario,
         cartId
       }
     //   console.log(nuevoUsuario);
+      return nuevoUsuario;
+    }
+
+    async getById(id){
+      let usuario;
+      usuario = await usuariosModelo.findOne({_id: id });
+
+      if (usuario  === null)
+        return null;
+
       return nuevoUsuario;
     }
 

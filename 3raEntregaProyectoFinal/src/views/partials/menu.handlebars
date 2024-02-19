@@ -4,17 +4,18 @@
             <a class="btn btn-primary" href="/realtimeproducts" role="button">Edición de Productos</a>
 
             <a class="btn btn-primary" href="/carts/0000" id="miCarrito" role="button">Mi Carrito</a>
+        {{/if}}
+
+        {{#if (eq usuario.role 'user-anonimo')}}
+            {{!-- <a class="btn btn-primary" href="/realtimeproducts" role="button">Edición de Productos</a> --}}
+
+            <a class="btn btn-primary" href="/chat" role="button">CHAT</a> 
         {{else}}
             <a class="btn btn-primary" href="/realtimeproducts" role="button">Edición de Productos</a>
 
             <a class="btn btn-primary" href="/chat" role="button">CHAT</a>
 
             <a class="btn btn-primary" href="/carts/0000" id="miCarrito" role="button">Mi Carrito</a>
-
         {{/if}}
-    {{else}}
-        <a class="btn btn-primary" href="/login" role="button">Login</a>
-
-        <a class="btn btn-primary" href="/registrate" role="button">Registrate</a>
     {{/if}}
 </div>

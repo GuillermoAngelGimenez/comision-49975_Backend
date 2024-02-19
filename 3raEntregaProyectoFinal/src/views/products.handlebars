@@ -1,17 +1,6 @@
 <hr>
 <div class="row">
     {{#if login}}
-        {{!-- {{#if administrador}}
-            <div class="col-6">
-                <h5><i> Bienvenido <strong>Administrador "adminCoder@coder.com"</strong></i>.</h5>
-            </div>
-            <div class="col-2">
-                <h6><i> Rol: Admin.</i></h6>
-            </div>
-            <div class="col-4 botonLogout">
-                <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
-            </div>
-        {{else}} --}}
             <div class="col-4">
                 <h5><i> Bienvenido/a, <strong>{{usuario.first_name}}  {{usuario.last_name}}</strong></i>.</h5>
             </div>
@@ -21,8 +10,6 @@
             <div class="col-6 botonLogout">
                 <a class="btn btn-outline-secondary btn-sm w-25" href="/api/sessions/logout" role="button">Logout</a>
             </div>    
-        {{!-- {{/if}}
-    {{else}} --}}
     {{/if}}
 
 </div>
