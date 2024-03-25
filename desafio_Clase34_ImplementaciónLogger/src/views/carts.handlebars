@@ -1,0 +1,158 @@
+  <style>
+    /* Estilos CSS para el diseño de filas y columnas */
+    .producto {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .columna {
+      flex: 5;
+      padding: 10px;
+      box-sizing: border-box;
+      flex-direction: row;
+      width: 20rem;
+      color: blue;
+    }
+    .columna-1 {
+      flex: 1;
+      padding: 10px;
+      box-sizing: border-box;
+      flex-direction: row;
+    }
+  </style>
+
+
+
+<div id="message-container">
+  {{#if successMessage}}
+    <div class="alert alert-success" role="alert">
+      {{successMessage}}
+    </div>
+  {{/if}}
+  {{#if errorMessage}}
+    <div class="alert alert-danger" role="alert">
+      {{errorMessage}}
+    </div>
+  {{/if}}
+</div>
+
+<div id="ticket-info-container">
+
+</div>
+
+
+{{#if carrito.products}}
+
+  <br> 
+
+  <div class="row">
+    <div class="col-12 botonLogout">
+      <a class="btn btn-outline-secondary btn-sm w-10" href="/api/sessions/logout" role="button">Logout</a>
+    </div>  
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h2>Productos en mi Carrito</h2>
+    </div>
+  </div>
+
+  <br>
+
+  {{#each carrito.products}}
+    <div class="producto">
+        <div class="columna">
+            <h5><b>{{this.idProducto.title}}</b></h5>
+        </div>
+        <div class="columna-1">
+            <p>{{this.idProducto.code}}</p>
+        </div>
+        <div class="columna-1">
+            <p><b>Cant.: </b>{{this.quantity}} </p>
+        </div>
+        <div class="columna-1">
+            <p><b>$</b>{{this.idProducto.price}}</p>
+        </div>
+    </div>
+    <hr>
+  {{/each}}
+
+  <p class="total-carrito">Total: ${{totalAcumulado}}</p>
+
+  <div class="botones-carrito">
+      <a class="btn btn-primary" href="/products" role="button">Volver</a>
+      <a class="btn btn-success" role="button" data-endpoint="/api/carts/{{carrito._id}}/purchase" id="botonComprar">Comprar</a>
+  </div>
+  
+{{else}}
+  <h4 class="mensaje-sin-productos">El carrito indicado no contiene productos</h4>
+
+  <div class="botones-websocket">
+      <a class="btn btn-primary" href="/products" role="button">Volver</a>
+  </div>
+{{/if}}
+
+<script>
+const botonComprar = document.getElementById('botonComprar');
+
+
+botonComprar.addEventListener('click', async function () {
+  const endpoint = botonComprar.dataset.endpoint;
+
+  fetch(endpoint, {method: 'POST', body: console.log(endpoint)
+        }).then(response => response.json())
+        .then(data => {
+        switch (data.compra) {
+          case 'sinStock':
+            Toastify({
+              text: "No hay suficiente stock para realizar la compra...\nDisculpe las molestias.",
+              duration: 3000,
+              gravity: "top",
+              position: "center",
+              style: {
+                      background: "red",
+                  }
+            }).showToast();
+            break;
+          
+          case 'parcial':
+            console.log(data);          
+              Toastify({
+                  text: "Los productos que permanecen en el carrito no se pudieron comprar por falta de stock\nSu ticket es: \nCódigo: " + data.code + "\nMonto: $" + data.amount + "\nFecha-Hora de Compra: " + data.purchase_datetime + "\nGracias!!!",
+                  duration: 6000,
+                  gravity: "top",
+                  position: "center",
+                  style: {
+                      background: "linear-gradient(to blue, grey, black)",
+                  }
+              }).showToast();
+
+            setTimeout(function() {
+              location.reload();
+            }, 6000);
+
+            break;
+
+          case 'total':
+            console.log(data);        
+              Toastify({
+                  text: "Su ticket es: \nCódigo: " + data.code + "\nMonto: $" + data.amount + "\nFecha-Hora de Compra: " + data.purchase_datetime + "\nGracias!!!",
+                  duration: 4000,
+                  gravity: "top",
+                  position: "center",
+                  style: {
+                      background: "linear-gradient(to blue, grey, black)",
+                  }
+              }).showToast();
+            
+            setTimeout(function() {
+              location.reload();
+            }, 4000);
+            break;
+
+          }
+        })
+  }
+);
+
+</script>
+

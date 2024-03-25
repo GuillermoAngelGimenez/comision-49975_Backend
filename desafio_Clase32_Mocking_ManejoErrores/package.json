@@ -1,5 +1,5 @@
 {
-  "name": "3raEntregaProyectoFinal",
+  "name": "desafio_Clase32_Mocking_ManejoErrores",
   "version": "1.0.0",
   "type": "module",
   "description": "",
@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.1.0",

@@ -3,6 +3,8 @@ import __dirname from "./util.js";
 import path from "path";
 import { engine } from "express-handlebars";
 
+import { errorHandler } from "./middleware/errorHandler.js";
+
 import routerProductos from "./routes/products.router.js";
 import routerCarts from "./routes/carts.router.js";
 import { router as productosRouterVista } from "./routes/productosRouterVista.js";
@@ -72,7 +74,6 @@ const serverHTTP = app.listen(PORT, () => {
   console.log(`Server escuchando en puerto ${PORT}`);
 });
 
-
 // agregado para ticket 
 // import { Server } from 'socket.io';
 // import { httpSocket } from './middleware/socket.js';
@@ -88,6 +89,8 @@ let usuarios = [];
 let mensajes = [];
 
 app.set("io", io);
+
+app.use(errorHandler);
 
 io.on("connection", (socket) => {
   console.log(`Se ha conectado un cliente con id ${socket.id}`);
@@ -116,9 +119,4 @@ io.on("connection", (socket) => {
   });
 
 });
-
-
-
-
-
 

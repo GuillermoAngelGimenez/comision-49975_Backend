@@ -1,0 +1,20 @@
+{"level":"error","message":"El id 55555 no corresponde a ningún carrito existente...!!!","timestamp":"2024-03-23T00:16:53.886Z"}
+{"level":"error","message":"El id 111111 no corresponde a ningún carrito existente...!!!","timestamp":"2024-03-23T00:21:06.499Z"}
+{"level":"fatal","message":"Error al leer el archivo de logs","timestamp":"2024-03-24T23:20:03.300Z"}
+{"level":"fatal","message":"Error al leer el archivo de logs","timestamp":"2024-03-24T23:24:37.156Z"}
+{"level":"fatal","message":"Error al leer el archivo de logs","timestamp":"2024-03-24T23:27:28.145Z"}
+{"level":"fatal","message":"Error al leer el archivo de logs","timestamp":"2024-03-24T23:31:29.035Z"}
+{"level":"error","message":"El id 778899 no corresponde a ningún carrito existente...!!!","timestamp":"2024-03-25T01:17:00.895Z"}
+{"level":"error","message":"El id 444 no corresponde a ningún carrito existente...!!!","timestamp":"2024-03-25T01:23:47.129Z"}
+{"level":"error","message":{"error":"Ingrese un id válido para el carrito...!!!"},"timestamp":"2024-03-25T01:43:35.498Z"}
+{"level":"error","message":"El Id 0000011112222 no corresponde a un valor válido para el carrito...!!!","timestamp":"2024-03-25T01:45:00.597Z"}
+{"level":"fatal","message":{"error":"Ingrese un id válido para el carrito...!!!"},"timestamp":"2024-03-25T02:16:51.323Z"}
+{"level":"fatal","message":"El aabbcc no corresponde a un id válido para el carrito...!!!","timestamp":"2024-03-25T02:18:36.666Z"}
+{"level":"error","message":"El id 000000 no es válido para el carrito...!!!","timestamp":"2024-03-25T03:43:14.955Z"}
+{"level":"error","message":"La única clave aceptada es quantity...!!!","timestamp":"2024-03-25T03:48:05.025Z"}
+{"level":"error","message":"La única clave aceptada es quantity...!!!","timestamp":"2024-03-25T03:48:37.197Z"}
+{"level":"error","message":"El id AABBCC no es un producto existente en el carrito...!!!","timestamp":"2024-03-25T03:55:58.241Z"}
+{"level":"error","message":"El id 44556677889900 no es un producto existente en el carrito...!!!","timestamp":"2024-03-25T03:57:34.343Z"}
+{"level":"error","message":"El id 0 no es válido para el carrito...!!!","timestamp":"2024-03-25T03:59:29.964Z"}
+{"level":"fatal","message":"El id 3333 no es válido","timestamp":"2024-03-25T04:01:54.455Z"}
+{"level":"error","message":"El id 0123456789 no corresponde a ningún carrito existente...!!!","timestamp":"2024-03-25T05:03:09.891Z"}

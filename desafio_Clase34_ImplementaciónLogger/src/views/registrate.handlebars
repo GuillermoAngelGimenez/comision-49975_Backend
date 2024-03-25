@@ -1,0 +1,63 @@
+
+    <div class="row tituloHome">
+      <div class="col-10">
+        <h2>Registro de Usuario:</h2>
+      </div>
+      <div class="col-2 botonesHome">
+        <a class="btn btn-outline-secondary btn-sm w-50" href="/login" role="button">Login</a>
+      </div>
+    </div>
+
+    <br>
+
+<div class="row registro">
+  <div class="col-4"></div>
+  <div class="col-4 formRegistro">
+    <br>
+    <form action="/api/sessions/registro" method="post">
+
+        {{#if error}}
+            <div style="color: red;">{{error}}</div>
+        {{/if}}
+        <br>
+        <div class="col-md-8 mb-4">
+        <label for="nombreReg" class="form-label">Nombre</label>
+        <input type="text" name="first_name" class="form-control" id="nombreReg">
+      </div>
+        <div class="col-md-8 mb-4">
+        <label for="apellidoReg" class="form-label">Apellido</label>
+        <input type="text" name="last_name" class="form-control" id="apellidoReg">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="emailReg" class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" id="emailReg">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="passReg" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="passReg">
+      </div>
+
+
+      <div class="col-md-8 mb-4">
+        <label for="edadReg" class="form-label">Edad</label>
+        <input type="edad" name="age" class="form-control" id="edadReg">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="rolReg" class="form-label">Rol</label>
+        <input type="rol" name="role" class="form-control" id="rolReg">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="cartReg" class="form-label">Cart</label>
+        <input type="cart" name="cart" class="form-control" id="cartReg">
+      </div>
+
+
+      <div class="registrar">
+        <button type="submit" class="btn btn-primary w-50" value="Registrar">Registrar</button>
+      </div>
+    </form>
+  </div>
+    <div class="col-4"></div>
+</div>
+<br>
+

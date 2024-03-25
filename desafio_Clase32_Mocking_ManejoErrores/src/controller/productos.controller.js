@@ -1,7 +1,12 @@
+import { Router } from 'express';
+
 import {isAdmin} from "../middleware/authadmin.js";
 import { productosService } from "../services/productos.service.js";
 import mongoose from "mongoose";
 
+import { CustomError } from "../utils/CustomErrors.js"
+import { STATUS_CODES, ERRORES_INTERNOS } from "../utils/tiposError.js";
+import { errorfaltanParam } from "../utils/errores.js";
 
 export class ProductosController{
     constructor(){}
@@ -21,7 +26,6 @@ export class ProductosController{
         pagina = req.query.pagina;
     
         try {
-          // resultado = await productsModelo.paginate({ deleted: false }, { lean: true, limit: 5, page: pagina });
           resultado = await productosService.getProductosPaginate();
           console.log(resultado);
         } catch (error) {
@@ -45,12 +49,6 @@ export class ProductosController{
         let objetoMongoDB = {
           status: "success/error",
           payload: resultado,
-          // totalPages: totalPages,
-          //   prevPage: prevPage,
-          //   nextPage: nextPage,
-          //   page: pagina,
-          //   hasPrevPage: hasPrevPage,
-          //   hasNextPage: hasNextPage,
           prevLink: prevL,
           nextLink: nextL,
         };
@@ -87,14 +85,12 @@ export class ProductosController{
             let valor = paramQuery[clave];
     
             if (clave === "category") {
-              // resultado = await productsModelo.find({deleted: false, category: valor});
               resultado = await productosService.getProductosCategory(valor);
               res.setHeader("Content-Type", "application/json");
               res.status(200).json({ resultado });
             }
     
             if (clave === "stock") {
-              // resultado = await productsModelo.find({deleted: false, stock: valor});
               resultado = await productosService.getProductosStock(valor);
               res.setHeader("Content-Type", "application/json");
               res.status(200).json({ resultado });
@@ -117,34 +113,26 @@ export class ProductosController{
       let { id } = req.params;
     
       if (!mongoose.Types.ObjectId.isValid(id)) {
-        res.setHeader("Content-Type", "application/json");
-        return res
-          .status(400)
-          .json({ error: `No existe un producto con el id ${id}!!!` });
+        // res.setHeader("Content-Type", "application/json");
+        // return res.status(400).json({ error: `No existe un producto con el id ${id} GUILLE!!!` });
+        throw CustomError.CustomError("Verifique ID de producto", "El ID ingresado no corresponde a un producto existente", STATUS_CODES.ERROR_DATOS_ENVIADOS, ERRORES_INTERNOS.ARGUMENTOS, errorArgumentos(req.body))
       }
-    
+    s
       let existe;
     
       try {
-        // existe = await productsModelo.findOne({ deleted: false, _id: id });
         existe = await productosService.getProductosById(id);
         console.log(existe);
       } catch (error) {
         res.setHeader("Content-Type", "application/json");
-        return res.status(500).json({
-          error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+        return res.status(500).json({error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
           detalle: error.message,
         });
       }
     
-      // if (!existe) {
-      //   res.setHeader("Content-Type", "application/json");
-      //   return res.status(400).json({ error: `No existe un usuario con id ${id}` });
-      // }
-    
       if (existe === null) {
         res.setHeader("Content-Type", "application/json");
-        return res.status(200).json(`El producto indicado con id ${id} no existe.`);
+        return res.status(400).json(`El producto indicado con id ${id} no existe.`);
       } else {
         res.setHeader("Content-Type", "application/json");
         return res.status(200).json({ producto: existe });
@@ -156,7 +144,6 @@ export class ProductosController{
       isAdmin(req, res, async() => { 
         let products;
         try {
-          // products = await productsModelo.find();
           products = await productosService.getProductosTodos();
         } catch (error) {
           console.log(error.message);
@@ -177,13 +164,14 @@ export class ProductosController{
           "stock",
           "category",
         ];
-      
+        
+        const inputFields = Object.keys(body);
+        
         const missingFields = requiredFields.filter((field) => !(field in req.body));
-      
+
         if (missingFields.length > 0) {
-          return res
-            .status(400)
-            .json({ error: `Faltan campos requeridos: ${missingFields.join(", ")}` });
+          // return res.status(400).json({ error: `Faltan campos requeridos: ${missingFields.join(", ")}` });
+          throw CustomError.CustomError("Faltan datos", "Faltan de ingresar algunos campos requeridos para el producto", STATUS_CODES.ERROR_ARGUMENTOS, ERRORES_INTERNOS.ARGUMENTOS, errorfaltanParam(requiredFields, inputFields))
         }
       
         const typeValidation = {
@@ -227,7 +215,6 @@ export class ProductosController{
         // validar que no se repita el code
         let existe = false;
         try {
-          // existe = await productsModelo.findOne({deleted: false, code: body.code});
           existe = await productosService.getProductosByCode(body.code);
         } catch (error) {
           res.setHeader("Content-Type", "application/json");
@@ -248,7 +235,6 @@ export class ProductosController{
         console.log(newProduct);
       
         try {
-          // let nuevoProducto = await productsModelo.create(newProduct);
           let nuevoProducto = await productosService.createProducto(newProduct);
           console.log(nuevoProducto);
           io.emit("add", newProduct);
@@ -259,7 +245,7 @@ export class ProductosController{
           res.setHeader("Content-Type", "application/json");
           return res.status(500).json({
             error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-            detalle: error.message + "ni idea ",
+            detalle: error.message
           });
         }
       })
@@ -278,7 +264,6 @@ export class ProductosController{
       
         let existe;
         try {
-          // existe = await productsModelo.findOne({ deleted: false, _id: id });
           existe = await productosService.getProductosById(id);
         } catch (error) {
           res.setHeader("Content-Type", "application/json");
@@ -290,13 +275,6 @@ export class ProductosController{
       
         // WebSocket
         const io = req.app.get("io");
-      
-        // if (!existe) {
-        //   res.setHeader("Content-Type", "application/json");
-        //   return res
-        //     .status(400)
-        //     .json({ error: `No existe un producto con id ${id}` });
-        // }
       
         const body = req.body;
       
@@ -380,7 +358,6 @@ export class ProductosController{
         // validar que no se repita el code ingresado respecto a existente
         existe = false;
         try {
-          // existe = await productsModelo.findOne({deleted: false, code: body.code});
           existe = await productosService.getProductosByCode(body.code);
         } catch (error) {
           res.setHeader("Content-Type", "application/json");
@@ -399,10 +376,8 @@ export class ProductosController{
       
         let resultado;
         try {
-          // resultado = await productsModelo.updateOne({ deleted: false, _id: id }, body);
           resultado = await productosService.updateProducto(id, body);
       
-          // let productActualizado = await productsModelo.findOne({deleted: false, _id: id});
           let productActualizado = await productosService.getProductosById(id);
 
           io.emit("update", productActualizado);
@@ -421,7 +396,6 @@ export class ProductosController{
           return res.status(500).json({
             error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
           });
-          // return res.status(500).json({error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`, detalle: error.message});
         }
       });
       
@@ -441,7 +415,6 @@ export class ProductosController{
       
         let existe;
         try {
-          // existe = await productsModelo.findOne({ deleted: false, _id: id });
           existe = productosService.getProductosById(id);
           console.log("producto eliminado");
         } catch (error) {
@@ -454,16 +427,8 @@ export class ProductosController{
       
         const io = req.app.get("io");
       
-        // if (!existe) {
-        //   res.setHeader("Content-Type", "application/json");
-        //   return res
-        //     .status(400)
-        //     .json({ error: `No existe un producto con id ${id}` });
-        // }
-      
         let resultado;
         try {
-          // resultado = await productsModelo.updateOne({ deleted: false, _id: id }, { $set: { deleted: true } });
           resultado = await productosService.deleteProducto(id);
       
           io.emit("delete", id);

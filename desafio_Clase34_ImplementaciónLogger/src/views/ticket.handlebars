@@ -1,0 +1,38 @@
+ 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // Recupera los datos del ticket del localStorage
+    const ticketData = JSON.parse(localStorage.getItem('ticketData'));
+
+    // Muestra los datos del ticket como desees en la página
+    console.log('Datos del ticket:', ticketData);
+    });
+
+
+
+    const infoTicketDiv = document.getElementById('info-ticket');
+
+    // Crear elementos HTML para mostrar la información del ticket
+    const titulo = document.createElement('h3');
+    titulo.textContent = "Gracias por tu compra!!!";
+    infoTicketDiv.appendChild(titulo);
+
+    const linea = document.createElement('hr');
+    infoTicketDiv.appendChild(linea);
+
+    const ticketContenido = document.createElement('p');
+    ticketContenido.textContent = ticketData;
+    infoTicketDiv.appendChild(ticketContenido);
+
+  </script>
+
+
+  
+  <div id="info-ticket">
+
+
+  </div>  
+  
+  <div class="botones-websocket">
+      <a class="btn btn-primary" href="/products" role="button">Volver</a>
+  </div>

@@ -4,7 +4,6 @@ import { productsModelo } from "../dao/models/managerProducts.js";
 import { ProductosController } from "../controller/productos.controller.js";
 import mongoose from "mongoose";
 
-
 export const router = Router();
 
 // const auth = (req, res, next) => {

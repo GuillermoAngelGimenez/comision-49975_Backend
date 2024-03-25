@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { productsModelo } from "../dao/models/managerProducts.js";
 import { cartsModelo } from "../dao/models/managerCarts.js";
+import { generaProducto } from "../mocks/mockProductos.js";
 import mongoose from "mongoose";
-// import { UsuariosController } from "../controller/usuarios.controller.js";
 
 import { verificarToken } from "../util.js";
 
@@ -16,6 +16,15 @@ const authP = (req, res, next) => {
   req.usuario = usuario;
   next();
 };
+
+async function insertProductos(productos) {
+  try {
+    const result = await productsModelo.insertMany(productos);
+    console.log('Productos insertados correctamente.');
+  } catch (error) {
+    console.error('Error al insertar productos:', error);
+  }
+}
 
 // router.get("/registrate", UsuariosController.registroUsuario);
 router.get("/registrate", (req, res) =>{
@@ -136,6 +145,22 @@ router.get("/carts/:id", async (req, res) => {
   });
 
   res.status(200).render("carts", { carrito, totalAcumulado });
+});
+
+router.post("/mockingproducts", async (req, res) => {
+  let cantidad = 2
+  if(!cantidad || cantidad === 0){
+      res.setHeader('Content-Type','application/json');
+      return res.status(400).json({error:`Ingrese la cantidad de productos a generar...!!!`})
+  }
+
+  let productos = generaProducto(cantidad);
+
+  await insertProductos(productos);
+  // productos.forEach(producto => productsModelo.create({producto}));
+
+  res.setHeader('Content-Type','application/json');
+  return res.status(200).json({payload: productos});
 });
 
 

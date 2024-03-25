@@ -1,0 +1,260 @@
+body {
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+  margin-left: 5rem;
+  margin-right: 5rem;
+  margin-bottom: 2rem;
+}
+
+h1, h2{
+  color: blue;
+  font-weight: bolder;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+h2 {
+  color: #333;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+.botones-principal{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: black solid 1px;
+  border-radius: 15px;
+  padding: 1rem;
+  margin-left: 13rem;
+  margin-right: 13rem;
+}
+
+.botones-carrito{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border: black solid 1px;
+  border-radius: 15px;
+  padding: 1rem;
+  margin-left: 13rem;
+  margin-right: 13rem;
+}
+
+a{
+    width: 13rem;
+}
+
+.botones-websocket, .botones-chat{
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+h4 {
+  color: #333;
+  margin: 20px 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.menu {
+  background-color: #333;
+  color: #fff;
+}
+
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.menu li {
+  margin: 0 10px;
+}
+
+.menu a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  color: #ccc;
+}
+
+
+#mensajes{
+  margin-top: 15px;
+  /* width: 95%; */
+  height: 380px;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 5px #333 inset;
+  line-height: 0.5rem;
+  padding-top: 2rem;
+  padding-left: 2rem;
+  border-radius: 10px;
+  background: rgb(33,125,123);
+  background: linear-gradient(68deg, rgba(33,125,123,1) 29%, rgba(120,209,120,1) 63%);
+}
+
+#mensaje{
+  width: 80%;
+}
+
+.mensaje{
+  border: 1px solid #555;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: rgb(93, 88, 143);
+  display: inline-block;
+}
+
+.productos-paginados{
+  border: 2px solid #555;
+  border-radius: 30px;
+  padding-left: 1.5rem;
+  background-color: rgb(122, 116, 130);
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+
+.productos-paginados h4{
+  font-weight: bold;
+  padding-left: 2rem;
+  color: rgb(116, 11, 116);
+}
+
+.productos-paginados div{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.mensaje-sin-productos{
+  text-align: center;
+}
+
+.productos-paginados p{
+  margin-bottom: 3px;
+}
+
+.addCarrito{
+  margin-right: 5rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.controles-paginado{
+  text-align: center;
+}
+
+/* Estilos para los enlaces de paginación */
+a {
+  color: blue;
+  text-decoration: none;
+  margin-right: 20px;
+  transition: text-shadow 0.3s ease-in-out;
+  font-weight: bolder;
+}
+
+/* Estilos para los enlaces de paginación al pasar el cursor sobre ellos */
+a:hover {
+  color: darkblue;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+  /* Estilos para los enlaces de paginación inactivos */
+  span {
+    color: gray;
+    margin-right: 20px;
+  }
+  
+  /* Estilos para el campo de entrada de página */
+  input {
+    width: 50px;
+    margin-left: 10px;
+  }
+  
+  .total-carrito{
+    text-align: right;
+    padding-right: 5rem;
+    font-size: 1.2rem;
+  }
+
+.login{
+  border: 3px solid blue;
+  border-radius: 2rem;
+  padding: 0.5rem;
+  width: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form h4{
+  text-align: center;
+  font-weight: bold;
+} 
+
+.tituloHome{
+  height: 3rem;
+}
+
+.botonesHome{
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 2px;
+} 
+
+.registro{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.formRegistro{
+  border: 2px solid black;
+  border-radius: 3rem;
+  padding: 1rem;
+}
+
+.registrar{
+  display: flex;
+  justify-content: right;
+}
+
+.botonLogin{
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
+
+h5 i strong{
+  text-transform: capitalize;
+}
+
+.botonLogout{
+  display: flex;
+  justify-content: right;
+  height: 2rem;
+}
