@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- <title>Document</title> --}}
+</head>
+<body>
+
+    <div class="row tituloHome">
+      <div class="col-10">
+        <h2>Registro de Usuario:</h2>
+      </div>
+      <div class="col-2 botonesHome">
+        <a class="btn btn-outline-secondary btn-sm w-50" href="/login" role="button">Login</a>
+      </div>
+    </div>
+
+    <br>
+
+<div class="row registro">
+  <div class="col-4"></div>
+  <div class="col-4 formRegistro">
+    <br>
+    <form action="/api/sessions/registro" method="post">
+
+        <div id="mensaje"></div>
+
+        <br>
+        <div class="col-md-8 mb-4">
+        <label for="nombreReg" class="form-label">Nombre</label>
+        <input type="text" name="first_name" class="form-control" id="nombreReg" value="{{first_name}}">
+      </div>
+        <div class="col-md-8 mb-4">
+        <label for="apellidoReg" class="form-label">Apellido</label>
+        <input type="text" name="last_name" class="form-control" id="apellidoReg" value="{{last_name}}">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="emailReg" class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" id="emailReg" value="{{email}}">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="passReg" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="passReg">
+      </div>
+
+
+      <div class="col-md-8 mb-4">
+        <label for="edadReg" class="form-label">Edad</label>
+        <input type="edad" name="age" class="form-control" id="edadReg" value="{{age}}">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="rolReg" class="form-label">Rol</label>
+        <input type="rol" name="role" class="form-control" id="rolReg" value="{{role}}">
+      </div>
+      <div class="col-md-8 mb-4">
+        <label for="cartReg" class="form-label">Cart</label>
+        <input type="cart" name="cart" class="form-control" id="cartReg" value="{{cart}}">
+      </div>
+
+
+      <div class="registrar">
+        <button type="submit" class="btn btn-primary w-50" value="Registrar">Registrar</button>
+      </div>
+    </form>
+  </div>
+    <div class="col-4"></div>
+</div>
+<br>
+
+<script>
+    let params = new URLSearchParams(window.location.search);
+
+    let first_name = params.get("first_name");
+    if (first_name) {
+        let inputNombre = document.getElementById("nombreReg");
+        inputNombre.value = first_name;
+    }
+
+    let last_name = params.get("last_name");
+    if (last_name) {
+        let inputApellido = document.getElementById("apellidoReg");
+        inputApellido.value = last_name;
+    }
+
+    let email = params.get("email");
+    if (email) {
+        let inputEmail = document.getElementById("emailReg");
+        inputEmail.value = email;
+    }
+
+    let age = params.get("age");
+    if (age) {
+        let inputEdad = document.getElementById("edadReg");
+        inputEdad.value = age;
+    }
+
+    let role = params.get("role");
+    if (role) {
+        let inputRol = document.getElementById("rolReg");
+        inputRol.value = role;
+    }
+
+    let cart = params.get("cart");
+    if (cart) {
+        let inputCart = document.getElementById("cartReg");
+        inputCart.value = cart;
+    }
+
+
+    let error = params.get("error");
+    if (error) {
+        error = error.replace(/\./g, ".<br>");
+        let divMensaje = document.getElementById("mensaje");
+        divMensaje.innerHTML = error;        
+        divMensaje.style.color = "red";
+    }
+</script>
+
+</body>
+</html>

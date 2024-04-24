@@ -1,0 +1,59 @@
+
+<div class="row">
+    <div class="container recupero">
+        <div class="row">
+        <div class="col-md-12 login-form">
+            <br><br>
+            <h4>Ingrese su nueva contraseña</h4>
+            <form action="/api/sessions/recupero03" method="post">
+
+                <div id="mensaje"></div>
+
+                <hr>
+            
+                <div class="col-md-12 mb-4">
+                    <label for="password1" class="form-label">Password</label>
+                    <input type="password" name="password1" class="form-control" id="password1" >
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <label for="password2" class="form-label">Repita Password</label>
+                    <input type="password" name="password2" class="form-control" id="password2" >
+                </div>
+
+                <br><br>
+                <input type="text" name="token" id="token" hidden>
+
+                <div class="botonLogin">
+                    <button type="submit" class="btn btn-primary w-50" value="Resetear">Resetear</button>
+                </div>
+
+            </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let params=new URLSearchParams(window.location.search)
+    let token=params.get("token")
+    if(!token){
+        alert("error")
+    }else{
+        console.log(token)
+        let inputToken=document.getElementById("token")
+        inputToken.value=token
+    }
+
+    
+    let error = params.get("error");
+
+    if (error) {
+        error = error.replace(/\./g, ".<br>");
+        let divMensaje = document.getElementById("mensaje");
+        divMensaje.innerHTML = error;        
+        divMensaje.style.color = "red";
+    }
+</script>
+

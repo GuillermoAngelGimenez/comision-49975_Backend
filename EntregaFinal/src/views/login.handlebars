@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- <title>Document</title> --}}
+</head>
+<body>
+
+<br>
+{{#if login}}
+    {{!-- ------------ --}}
+{{else}}
+    <div class="row tituloHome">
+        <div class="col-10">
+            <h2>Bienvenido a la Web de ....</h2>
+        </div>
+        <div class="col-2 botonesHome">
+            <a class="btn btn-outline-secondary btn-sm w-60" href="/registrate" role="button">Registrate</a>
+            <br>
+            <a class="btn btn-outline-secondary btn-sm w-60" href="/api/sessions/github" role="button">Acceder con GitHub</a>
+        </div>
+    </div>
+{{/if}}
+
+<br>
+<div class="container login">
+  <div class="row">
+    <div class="col-md-12 login-form">
+        <h4>Pantalla de Login de Usuario</h4>
+        <form action="/api/sessions/login" method="post">
+
+            <div id="mensaje"></div>
+            <br>
+            
+            <div class="col-md-12 mb-4">
+                <label for="emailReg" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" id="emailReg" value="{{email}}" >
+            </div>
+            <div class="col-md-12 mb-4">
+                <label for="passReg" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" id="passReg">
+            </div>
+
+            <div class="botonLogin">
+                <button type="submit" class="btn btn-primary w-50" value="Registrar">Ingresar</button>
+            </div>
+
+        </form>
+
+        <a class="btn" href="/recupero" role="button"><u>Olvide mi contraseña</u></a>
+        <br><br>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let params = new URLSearchParams(window.location.search);
+    
+    let email = params.get("email");
+    if (email) {
+        let inputEmail = document.getElementById("emailReg");
+        inputEmail.value = email;
+    }
+
+    let error = params.get("error");
+
+    if (error) {
+        error = error.replace(/\./g, ".<br>");
+        let divMensaje = document.getElementById("mensaje");
+        divMensaje.innerHTML = error;        
+        divMensaje.style.color = "red";
+    }
+</script>
+
+<script src="../public/js/index.js"></script>
+
+</body>
+</html>
+
+
+
